@@ -165,8 +165,7 @@ if ($_REQUEST['act'] == 'setup')
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'check_config')
 {
-    $code = $_POST['code'];
-
+    $code = empty($_POST['code']) ? '' : trim(addslashes($_POST['code']));
     include_once(ROOT_PATH."includes/modules/integrates/".$code.".php");
     $_POST['cfg']['quiet'] = 1;
     $cls_user = new $code ($_POST['cfg']);
@@ -281,7 +280,7 @@ if ($_REQUEST['act'] == 'check_config')
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'save_uc_config')
 {
-    $code = $_POST['code'];
+    $code = empty($_POST['code']) ? '' : trim(addslashes($_POST['code']));
 
     $cfg = unserialize($_CFG['integrate_config']);
 
@@ -329,8 +328,7 @@ if ($_REQUEST['act'] == 'save_uc_config')
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'save_uc_config_first')
 {
-    $code = $_POST['code'];
-
+    $code = empty($_POST['code']) ? '' : trim(addslashes($_POST['code']));
     include_once(ROOT_PATH."includes/modules/integrates/".$code.".php");
     $_POST['cfg']['quiet'] = 1;
     $cls_user = new $code ($_POST['cfg']);
