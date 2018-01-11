@@ -10,6 +10,7 @@ namespace App\Http\Controllers\dckc;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\dckc\Goods;
 
 class GoodsController extends Controller{
 
@@ -17,11 +18,15 @@ class GoodsController extends Controller{
 
     public function getlist(){
 
-        $g = 'hello world';
+        $rules = [
+            'when' => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInput($rules)) {
+            return $error;
+        }
+        $data = Goods::getHomeList();
 
-
-
-        return $this->json( $g );
+        return $this->json( $data );
 
     }
 
