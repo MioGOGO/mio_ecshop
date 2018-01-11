@@ -26,12 +26,11 @@ class Goods extends BaseModel
     protected $guarded = [];
 
     protected $appends = [
-        'id', 'category', 'brand', 'shop', 'sku', 'default_photo', 'photos', 'name', 'price', 'current_price', 'discount', 'sales_count', 'score', 'good_stock',
-        'comment_count', 'is_liked', 'review_rate', 'intro_url', 'share_url', 'created_at', 'updated_at'
+        'id','coverImg', 'price','name'
     ];
 
     protected $visible = [
-        'id', 'category', 'brand', 'shop', 'tags', 'default_photo', 'photos', 'sku', 'name', 'price', 'current_price', 'discount', 'is_shipping', 'promos', 'stock', 'properties', 'sales_count', 'attachments', 'goods_desc', 'score', 'comments', 'good_stock', 'comment_count', 'is_liked', 'review_rate', 'intro_url', 'share_url', 'created_at', 'updated_at'
+        'id','coverImg', 'price','name'
     ];
 
     // protected $with = [];
@@ -53,7 +52,8 @@ class Goods extends BaseModel
     public static function getHomeList()
     {
         return self::formatBody([
-            'all_products' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
+            'nowGoodsList' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
+            'tomorrowGoodsList' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
         ]);
     }
 
@@ -241,7 +241,7 @@ class Goods extends BaseModel
         return Comment::getCommentCountById($this->goods_id);
     }
 
-    public function getPhotosAttribute()
+    public function getcoverImgAttribute()
     {
 //        $goods =  Goods::where('goods_id', $this->goods_id)->first();
 //
