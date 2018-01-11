@@ -28,9 +28,9 @@ class Goods extends BaseModel{
     {
         $model = self::where(['is_delete' => 0, 'is_on_sale' => 1, 'is_alone_sale' => 1]);
         if( $type ){
-            return $model->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
-        }else{
             return $model->where($type, 1)->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
+        }else{
+            return $model->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
         }
     }
 
