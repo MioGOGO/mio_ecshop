@@ -35,7 +35,25 @@ class GoodsGallery extends BaseModel {
 
 	    return $goods_images;
     }
-    
+    /*
+     * 商品图片返回一张*/
+    public static function getPhotoById($id)
+    {
+        $goods_images = false;
+
+        $model = self::where('goods_id', $id)->orderBy('img_id')->first();
+
+        if (!$model->IsEmpty())
+        {
+            $photo = formatPhoto($model->img_url);
+            print_r( $photo );exit;
+            if (is_array($photo)) {
+                $goods_images[] = $photo;
+            }
+        }
+
+        return $goods_images;
+    }
     public static function getCategoryPhoto($cat_id)
     {
         //获取分类ids
