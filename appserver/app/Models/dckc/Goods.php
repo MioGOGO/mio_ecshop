@@ -75,5 +75,9 @@ class Goods extends BaseModel{
     {
         return $this->belongsToMany('App\Models\v2\Attribute','goods_attr','goods_id','attr_id')->where('attribute.attr_type', '!=',0)->groupBy('attr_id');
     }
+    public function getCategoryAttribute()
+    {
+        return $this->cat_id;
+    }
 
 }
