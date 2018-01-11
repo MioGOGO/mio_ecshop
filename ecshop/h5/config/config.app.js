@@ -6,5 +6,5 @@ var GLOBAL_CONFIG = {
 	'DEBUG': false,
 	'ENCRYPTED':false,
 	 //如果公众号没有配置，将for_weixin置为false，才能在微信中使用
-	'FOR_WEIXIN':false
+	'FOR_WEIXIN':true
 };
