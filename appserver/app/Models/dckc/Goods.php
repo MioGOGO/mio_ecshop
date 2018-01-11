@@ -67,6 +67,35 @@ class Goods extends BaseModel
         }
     }
 
+    /**
+     * 判断某个商品是否正在特价促销期
+     *
+     * @access  public
+     * @param   float   $price      促销价格
+     * @param   string  $start      促销开始日期
+     * @param   string  $end        促销结束日期
+     * @return  float   如果还在促销期则返回促销价，否则返回0
+     */
+    public static function bargain_price($price, $start, $end)
+    {
+        if ($price == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            $time = time();
+            // $time = gmtime();
+            if ($time >= $start && $time <= $end)
+            {
+                return $price;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
 
     public function getIdAttribute()
     {
