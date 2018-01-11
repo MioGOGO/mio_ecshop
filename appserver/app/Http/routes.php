@@ -4,7 +4,7 @@
 use App\Helper\Token;
 
 $app->get('/', function () use ($app) {
-    return 'Hi';
+    return 'ok';
 });
 
 //Other
@@ -24,6 +24,12 @@ $app->group(['namespace' => 'App\Http\Controllers\v2', 'prefix' => 'v2'], functi
     $app->get('ecapi.auth.web', 'UserController@webOauth');
 
     $app->get('ecapi.auth.web.callback/{vendor:[0-9]+}', 'UserController@webCallback');
+
+});
+
+//dckc guset
+$app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'middleware' => ['xss']],function($app){
+    $app->get('goods/list','GoodsController@getlist');
 
 });
 
