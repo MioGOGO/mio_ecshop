@@ -259,7 +259,7 @@ class Goods extends BaseModel
 //
 //        return $arr;
 
-        return GoodsGallery::getPhotosById($this->goods_id)['0'][''];
+        return GoodsGallery::getPhotoById($this->goods_id);
     }
 
     public function getDefaultPhotoAttribute()
