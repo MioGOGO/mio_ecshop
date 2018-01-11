@@ -11,7 +11,6 @@ namespace App\Models\dckc;
 use App\Models\BaseModel;
 use App\Helper\Token;
 use \DB;
-use App\Services\Shopex\Erp;
 
 class Goods extends BaseModel
 {
