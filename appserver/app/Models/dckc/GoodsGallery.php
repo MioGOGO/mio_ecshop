@@ -43,12 +43,11 @@ class GoodsGallery extends BaseModel {
 
         $model = self::where('goods_id', $id)->orderBy('img_id')->first();
 
-        if (!$model->IsEmpty())
+        if ($model)
         {
             $photo = formatPhoto($model->img_url);
-            print_r( $photo );exit;
             if (is_array($photo)) {
-                $goods_images[] = $photo;
+                $goods_images =  $photo['large'];
             }
         }
 
