@@ -1,1 +1,108 @@
-20170921
+//1. 今日菜单api/goods/List?when=now
+  nowGoodsList = [{
+    //菜品id
+    id:2342,
+    //封面
+    coverImg:'http://xxx.xxx.com/xxx.png',
+    //价格
+    price:50,
+    //名称
+    name:'xxxx'
+  },
+  {
+    id:2342,
+    coverImg:'http://xxx.xxx.com/xxx.png',
+    price:50,
+    name:'xxxx'
+  }]
+//2. 明日菜单api/goods/List?when=tomorrow
+tomorrowGoodsList = [{
+    id:2342,
+    coverImg:'http://xxx.xxx.com/xxx.png',
+    price:50,
+    name:'xxxx'
+  },
+  {
+    coverImg:'http://xxx.xxx.com/xxx.png',
+    price:50,
+    name:'xxxx'
+  }]
+//3. 菜品详情 api/goods/detail
+  //response响应
+  result = {
+    errCode:0,
+    msg:'',
+    data: {
+      coverImg: 'http://xxx.xxx.com/xxx.png',
+      price: 50,
+      name: 'xxxx',
+      headerImg: 'http://xxx.xxx.com/xxx.png',
+      //介绍描述信息
+      detail: {
+        desc: 'xxxxxxxxzxxxzxxxxxx',
+        img: 'http://xxx.xxx.com/xxx.png',
+      },
+      // 营养信息
+      nutrient: {
+        // 主菜
+        entree: ['xxx 90g', 'xxx 40g', 'xxx 60g'],
+        // 配菜
+        dish: ['xxx 90g', 'xxx 40g', 'xxx 60g'],
+        // 主食
+        staple: ['xxx 90g', 'xxx 40g']
+      },
+      // 能量信息
+      energy: {
+        //卡路里
+        calorie: '19.9g',
+        //蛋白质
+        protein: '19.9g',
+        //糖份
+        sugar: '19.9g',
+      }
+    }
+  }
+
+//4.下单接口 api/order
+    //request参数
+    params = {
+      address:'xxxx',
+      dishTime:'xxxxx',
+      goodsList:[
+        {
+          id:'234242',
+          amount:5,
+          fee:195.00,
+        }
+      ],
+      totalFee:195.00,
+      note:'备注',
+      payType:'wx'
+    }
+    //response响应
+    result = {
+      errCode:0,
+      msg:'',
+      data:{
+        appId:'xxxxxxx',
+        nonceStr:'xxxxxxxz',
+        timeStamp:'xxxxxzx',
+        package:'prepay_id=xxxxxxxx',
+        paySign:'sxxxxxxxx',
+        signType:'MD5'
+      }
+    }
+//5.完善个人信息
+    //request 参数
+    param = {
+      name:'张三',
+      gender: 'm',
+      phone:'23423423',
+      address:'sdxsdfsfsfs',
+      subAdd:'1号楼',
+    }
+    //response
+    result = {
+      errCode:0,
+      msg:''
+    }

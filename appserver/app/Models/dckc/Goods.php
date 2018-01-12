@@ -52,10 +52,9 @@ class Goods extends BaseModel
     public static function getHomeList( array $attributes )
     {
         extract( $attributes );
-        print_r( $attributes );exit;
-        $infos = GoodsCategory::getCategorybykeyword( [$keyworld] );
+        $infos = GoodsCategory::getCategorybykeyword( [ $when.'GoodsList' ] );
         return self::formatBody([
-            $keyworld => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
+            $when.'GoodsList' => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
         ]);
     }
 
