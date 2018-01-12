@@ -120,14 +120,14 @@ class Attribute extends BaseModel {
             'protein' => '蛋白质',
             'sugar' =>'糖份'
         ];
-        $res = GoodsAttr::selectRaw('attr_price,attr_value,attr_name as name,attr_type')->where('goods_id',$goodid)->leftJoin('attribute',function ($query) use($arr){
+        $res = GoodsAttr::selectRaw('attr_price as info,ttr_value,attr_name as name,attr_type')->where('goods_id',$goodid)->leftJoin('attribute',function ($query) use($arr){
             $query->on('attribute.attr_id','=','goods_attr.attr_id');
         })->get();
         foreach ($res as $key => $row) {
             if( array_key_exists( $row['name'],array_flip( $kv ) ) ){
 
                 if( $row['attr_type']  == 2 ){
-                    $arr[ array_flip($kv)[$row['name']] ][] = $row['attr_value'].' '.$row['attr_price'];
+                    $arr[ array_flip($kv)[$row['name']] ][] = $row['attr_value'].' '.$row['info'];
                 }else{
                     $arr[ array_flip($kv)[$row['name']] ] = $row['attr_value'];
                 }
