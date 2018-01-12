@@ -49,23 +49,20 @@ class Goods extends BaseModel
     /**
      * 首页商品列表
      */
-    public static function getHomeList()
+    public static function getHomeList( array $attributes )
     {
-        $infos = GoodsCategory::getCategorybykeyword( ['nowGoodsList','tomorrowGoodsList'] );
+        extract( $attributes );
+        print_r( $attributes );exit;
+        $infos = GoodsCategory::getCategorybykeyword( [$keyworld] );
         return self::formatBody([
-            'nowGoodsList' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
-            'tomorrowGoodsList' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
+            $keyworld => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
         ]);
     }
 
-    public static function getRecommendGoods($type)
+    public static function getRecommendGoods( array $cat_id_arr )
     {
         $model = self::where(['is_delete' => 0, 'is_on_sale' => 1, 'is_alone_sale' => 1]);
-        if ($type) {
-            return $model->where($type, 1)->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
-        } else {
-            return $model->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
-        }
+        return $model->whereIn( 'cat_id', $cat_id_arr )->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
     }
 
     /**
