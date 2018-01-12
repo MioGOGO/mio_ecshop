@@ -51,6 +51,7 @@ class Goods extends BaseModel
      */
     public static function getHomeList()
     {
+        $infos = GoodsCategory::getCategorybykeyword( ['nowGoodsList','tomorrowGoodsList'] );
         return self::formatBody([
             'nowGoodsList' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
             'tomorrowGoodsList' => count(self::getRecommendGoods(false)) == 0 ? null : self::getRecommendGoods(false),
