@@ -75,7 +75,7 @@ class GoodsCategory extends BaseModel {
         return [0];
     }
     public static function getCategorybykeyword( array $kw ){
-        $info = GoodsCategory::whereIn('keywords',$kw )->where('is_show', 1)->orderBy('cat_id', 'ASC')->toArray();
+        $info = GoodsCategory::whereIn('keywords',$kw )->where('is_show', 1)->orderBy('cat_id', 'ASC')->lists( 'cat_id' )->toArray();
         if( is_array( $info ) ){
             print_r( $info );exit;
 
