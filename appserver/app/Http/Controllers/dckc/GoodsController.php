@@ -24,7 +24,7 @@ class GoodsController extends Controller{
         if ($error = $this->validateInput($rules)) {
             return $error;
         }
-        $data = Goods::getHomeList();
+        $data = Goods::getHomeList( $this->validated );
 
         return $this->json( $data );
 
