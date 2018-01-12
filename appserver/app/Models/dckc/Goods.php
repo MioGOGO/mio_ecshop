@@ -64,7 +64,37 @@ class Goods extends BaseModel
         return $model->whereIn( 'cat_id', $cat_id_arr )->orderBy('sort_order')->orderBy('last_update', 'desc')->with('properties')->get();
     }
 
-    /**
+    public static function getInfo(array $attributes)
+    {
+        extract($attributes);
+
+
+        $infos = Attribute::get_goods_attr_info_byid( $id );
+        print_r( $infos );
+        exit;
+
+        $model = Goods::where(['is_delete' => 0, 'goods_id' => $id]);
+
+        $data = $model->with(['properties', 'tags', 'stock', 'attachments'])->first();
+
+        if (!$data) {
+            return self::formatError(self::NOT_FOUND);
+        }
+
+        if (!$data->is_on_sale) {
+            return self::formatError(self::BAD_REQUEST, trans('message.good.off_sale'));
+        }
+        // $current_price = UserRank::getMemberRankPriceByGid($product);
+        $data['promos'] = FavourableActivity::getPromoByGoods($id, $data->cat_id, $data->brand_id);
+
+//        if ($data->promote_price == 0) {
+//            $current_price = UserRank::getMemberRankPriceByGid($product);
+//            return self::formatBody(['product' => array_merge($data->toArray(), ['current_price' => $current_price])]);
+//        }
+        return self::formatBody(['product' => $data->toArray()]);
+    }
+
+        /**
      * 判断某个商品是否正在特价促销期
      *
      * @access  public

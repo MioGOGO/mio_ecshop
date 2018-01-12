@@ -12,11 +12,15 @@ namespace App\Http\Controllers\dckc;
 use App\Http\Controllers\Controller;
 use App\Models\dckc\Goods;
 
-class GoodsController extends Controller{
+class GoodsController extends Controller
+{
 
 
-
-    public function getlist(){
+    /**
+     * 获取首页菜单
+     */
+    public function getlist()
+    {
 
         $rules = [
             'when' => 'required|string|min:1',
@@ -24,10 +28,29 @@ class GoodsController extends Controller{
         if ($error = $this->validateInput($rules)) {
             return $error;
         }
-        $data = Goods::getHomeList( $this->validated );
+        $data = Goods::getHomeList($this->validated);
+
+        return $this->json($data);
+
+    }
+
+    /*
+     * 获取菜品明细
+     * */
+    public function goodsdetail()
+    {
+
+        $rules = [
+            'id' => 'required|integer|min:1',
+        ];
+        if ($error = $this->validateInput($rules)) {
+            return $error;
+        }
+
+        $data = Goods::getInfo( $this->validated );
+
 
         return $this->json( $data );
-
     }
 
 
