@@ -66,6 +66,7 @@ class Goods extends BaseModel
 
     public static function getInfo(array $attributes)
     {
+        self::$visible[]= 'headerImg';
         extract($attributes);
 
         $model = Goods::where(['is_delete' => 0, 'goods_id' => $id]);
@@ -79,7 +80,6 @@ class Goods extends BaseModel
         if (!$data->is_on_sale) {
             return self::formatError(self::BAD_REQUEST, trans('message.good.off_sale'));
         }
-        print_r( $data );exit;
         $infos = Attribute::get_goods_attr_info_byid( $id );
         // $current_price = UserRank::getMemberRankPriceByGid($product);
         $data['promos'] = FavourableActivity::getPromoByGoods($id, $data->cat_id, $data->brand_id);
