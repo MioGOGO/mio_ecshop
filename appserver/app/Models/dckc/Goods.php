@@ -68,11 +68,6 @@ class Goods extends BaseModel
     {
         extract($attributes);
 
-
-        $infos = Attribute::get_goods_attr_info_byid( $id );
-        print_r( $infos );
-        exit;
-
         $model = Goods::where(['is_delete' => 0, 'goods_id' => $id]);
 
         $data = $model->with(['properties', 'tags', 'stock', 'attachments'])->first();
@@ -84,6 +79,8 @@ class Goods extends BaseModel
         if (!$data->is_on_sale) {
             return self::formatError(self::BAD_REQUEST, trans('message.good.off_sale'));
         }
+        print_r( $data );exit;
+        $infos = Attribute::get_goods_attr_info_byid( $id );
         // $current_price = UserRank::getMemberRankPriceByGid($product);
         $data['promos'] = FavourableActivity::getPromoByGoods($id, $data->cat_id, $data->brand_id);
 
@@ -91,7 +88,20 @@ class Goods extends BaseModel
 //            $current_price = UserRank::getMemberRankPriceByGid($product);
 //            return self::formatBody(['product' => array_merge($data->toArray(), ['current_price' => $current_price])]);
 //        }
-        return self::formatBody(['product' => $data->toArray()]);
+        extract( $infos );
+        return self::formatBody([
+            'data' => $data->toArray(),
+            'nutrient'=> [ 'entree' => isset($entree) ? $entree : array(),
+                'dish' => isset($dish) ? $dish : array(),
+                'staple' => isset($staple) ? $staple : array()
+            ],
+            'energy' => [
+                'calorie' => isset($calorie) ? $calorie : '',
+                'protein' => isset($protein) ? $protein : '',
+                'sugar' => isset($sugar) ? $sugar : '',
+            ]
+
+        ]);
     }
 
         /**
