@@ -41,7 +41,7 @@ class GoodsGallery extends BaseModel {
     {
         $goods_images = false;
 
-        $model = self::where(['goods_id', $id],['img_desc',$key])->orderBy('img_id')->first();
+        $model = self::where(['goods_id'=>$id,'img_desc'=>$key])->orderBy('img_id')->first();
 
         if ($model)
         {
