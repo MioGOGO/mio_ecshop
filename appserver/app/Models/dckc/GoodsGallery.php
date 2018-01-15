@@ -37,11 +37,11 @@ class GoodsGallery extends BaseModel {
     }
     /*
      * 商品图片返回一张*/
-    public static function getPhotoById($id)
+    public static function getPhotoById($id,$key)
     {
         $goods_images = false;
 
-        $model = self::where('goods_id', $id)->orderBy('img_id')->first();
+        $model = self::where(['goods_id', $id],['img_desc',$key])->orderBy('img_id')->first();
 
         if ($model)
         {
