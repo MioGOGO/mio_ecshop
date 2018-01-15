@@ -66,7 +66,6 @@ class Goods extends BaseModel
 
     public static function getInfo(array $attributes)
     {
-        self::$visible[]= 'headerImg';
         extract($attributes);
 
         $model = Goods::where(['is_delete' => 0, 'goods_id' => $id]);
@@ -81,8 +80,14 @@ class Goods extends BaseModel
             return self::formatError(self::BAD_REQUEST, trans('message.good.off_sale'));
         }
         $infos = Attribute::get_goods_attr_info_byid( $id );
+        $headerImg = GoodsGallery::getPhotoById($data->goods_id,'headerImg');
+        $good_desc = ['desc'=>$data->goods_desc,'img'=>GoodsGallery::getPhotoById($data->goods_id,'detailImg') ];
+        $data = $data->toArray();
+        $data['headerImg'] = $headerImg;
+        $data['good_desc'] = $good_desc;
         // $current_price = UserRank::getMemberRankPriceByGid($product);
-        $data['promos'] = FavourableActivity::getPromoByGoods($id, $data->cat_id, $data->brand_id);
+        //$data['promos'] = FavourableActivity::getPromoByGoods($id, $data->cat_id, $data->brand_id);
+
 
 //        if ($data->promote_price == 0) {
 //            $current_price = UserRank::getMemberRankPriceByGid($product);
@@ -90,7 +95,7 @@ class Goods extends BaseModel
 //        }
         extract( $infos );
         return self::formatBody([
-            'data' => $data->toArray(),
+            'data' => $data,
             'nutrient'=> [ 'entree' => isset($entree) ? $entree : array(),
                 'dish' => isset($dish) ? $dish : array(),
                 'staple' => isset($staple) ? $staple : array()
