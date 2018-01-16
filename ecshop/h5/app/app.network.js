@@ -91,15 +91,15 @@
                 request: function (config) {
                     $rootScope.activeCalls += 1;
 
-                    //config.headers['X-ECAPI-UserAgent'] = 'Platform/Wechat, Device/Webview';
-                    config.headers['X-ECAPI-UserAgent'] = 'Platform/Wechat';
-                    config.headers['X-ECAPI-UDID']      = null;
-                    config.headers['X-ECAPI-Ver']       = "1.1.0";
-                    config.headers['X-ECAPI-Sign']      = null;
+                    //config.headers['X-DCKC-UserAgent'] = 'Platform/Wechat, Device/Webview';
+                    config.headers['X-DCKC-UserAgent'] = 'Platform/Wechat';
+                    config.headers['X-DCKC-UDID']      = null;
+                    config.headers['X-DCKC-Ver']       = "1.1.0";
+                    config.headers['X-DCKC-Sign']      = null;
 
                     var token = AppAuthenticationService.getToken();
                     if ( token ) {
-                        config.headers['X-ECAPI-Authorization'] = token;
+                        config.headers['X-DCKC-Authorization'] = token;
                     }
 
                     if (GLOBAL_CONFIG.DEBUG) {
@@ -147,7 +147,7 @@
 
                         var sign = signData.toString(CryptoJS.enc.Hex);
 
-                        config.headers["X-ECAPI-Sign"] = sign + "," + timestamp;
+                        config.headers["X-DCKC-Sign"] = sign + "," + timestamp;
 
                         if(encryptedData && encryptedData.length > 0){
                             config.data = {
@@ -177,9 +177,9 @@
                     }
 
                     var headers = response.headers();
-                    var ErrorCode = parseInt(headers['x-ecapi-errorcode']);
-                    var ErrorDesc = headers['x-ecapi-errordesc'];
-                    var NewAuthorization = headers['x-ecapi-new-authorization'];
+                    var ErrorCode = parseInt(headers['x-dckc-errorcode']);
+                    var ErrorDesc = headers['x-dckc-errordesc'];
+                    var NewAuthorization = headers['x-dckc-new-authorization'];
                     if ( GLOBAL_CONFIG.ENCRYPTED) {
                         if (response.data && response.data.data) {
                             var raw = XXTEA.decryptFromBase64(response.data.data, xxtea_key);
