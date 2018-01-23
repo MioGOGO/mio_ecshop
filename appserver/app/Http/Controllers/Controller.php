@@ -40,6 +40,24 @@ class Controller extends BaseController
             return false;
         }
     }
+    /**
+     * 验证输入信息
+     * @param  array $rules
+     * @return response
+     */
+    public function validateInputDckc($rules)
+    {
+        $requests = $this->request->all();
+
+        $validator = Validator::make($requests, $rules);
+        if ($validator->fails()) {
+            return self::json(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
+        } else {
+            $this->validated = array_intersect_key($requests, $rules);
+            $this->validated = $requests ;
+            return false;
+        }
+    }
 
     /**
      * 自定义验证

@@ -21,7 +21,7 @@ class OrderController extends Controller
             'open_id'       => 'required|string|min:1',
         ];
 
-        if ($error = $this->validateInput($rules)) {
+        if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
         echo 'flag'."<br>";

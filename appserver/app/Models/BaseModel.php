@@ -55,4 +55,12 @@ class BaseModel extends Model
 
         return $body;
     }
+    public static function formatErrorDckc($code, $message = null)
+    {
+
+        $body['error'] = true;
+        $body['errCode'] = $code;
+        $body['msg'] = $message;
+        return $body;
+    }
 }
