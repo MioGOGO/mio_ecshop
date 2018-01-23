@@ -34,7 +34,7 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
 
 });
 //wx openid
-$app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['token', 'xss']], function($app)
+$app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['openid','xss']], function($app)
 {
     $app->get('order/add', 'OrderController@add');
 });
