@@ -7,8 +7,11 @@
  */
 
 namespace App\Http\Middleware;
-use App\Helper\WxOpenid;
 
+
+
+use App\Helper\WxOpenid;
+use Closure;
 class OpenidAuthenticate
 {
 
