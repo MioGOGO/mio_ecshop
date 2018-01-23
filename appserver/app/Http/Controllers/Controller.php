@@ -51,12 +51,56 @@ class Controller extends BaseController
 
         $validator = Validator::make($requests, $rules);
         if ($validator->fails()) {
-            return self::json(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
+            return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
         } else {
             $this->validated = array_intersect_key($requests, $rules);
             $this->validated = $requests ;
             return false;
         }
+    }
+    public function jsondckc($body = false)
+    {
+        //过滤null为空字符串(需协调客户端兼容)
+        // if ($body) {
+        //     $body = format_array($body);
+        // }
+
+        // 写入日志
+        if (config('app.debug')) {
+
+            $debug_id = uniqid();
+
+            Log::debug($debug_id,[
+                'LOG_ID'         => $debug_id,
+                'IP_ADDRESS'     => $this->request->ip(),
+                'REQUEST_URL'    => $this->request->fullUrl(),
+                'AUTHORIZATION'  => $this->request->header('X-'.config('app.name').'-Authorization'),
+                'REQUEST_METHOD' => $this->request->method(),
+                'PARAMETERS'     => $this->validated,
+                'RESPONSES'      => $body
+            ]);
+
+            $body['debug_id'] = $debug_id;
+        }
+
+        if (isset($body['error']) && $body['error']) {
+            unset($body['error']);
+            $response = response()->json($body);
+            $response->header('X-'.config('app.name').'-ErrorCode', $body['errCode']);
+            $response->header('X-'.config('app.name').'-ErrorDesc', urlencode($body['msg']));
+        } else {
+            $response = response()->json($body);
+            $response->header('X-'.config('app.name').'-ErrorCode', 0);
+        }
+
+        if (config('token.refresh')) {
+            if ($new_token = Token::refresh()) {
+                // 生成新token
+                $response->header('X-'.config('app.name').'-New-Authorization', $new_token);
+            }
+        }
+
+        return $response;
     }
 
     /**
