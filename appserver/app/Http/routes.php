@@ -33,6 +33,11 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
     $app->get('goods/detail','GoodsController@goodsdetail');
 
 });
+//wx openid
+$app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['token', 'xss']], function($app)
+{
+    $app->post('order/add', 'OrderController@add');
+});
 
 //Guest
 $app->group(['namespace' => 'App\Http\Controllers\v2','prefix' => 'v2', 'middleware' => ['xss']], function($app)
