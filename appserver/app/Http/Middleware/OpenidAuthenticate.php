@@ -16,8 +16,11 @@ class OpenidAuthenticate
 {
 
     public function handle($request, Closure $next){
-        $memberName  = WxOpenid::authorization();
-
+        $userinfo = WxOpenid::authorization();
+        if( !$userinfo ){
+            return false;
+        }
+        return $next($request);
 
     }
 
