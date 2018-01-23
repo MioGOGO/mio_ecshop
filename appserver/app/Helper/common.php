@@ -179,6 +179,22 @@ if (! function_exists('show_error')) {
         return $response;
     }
 }
+if (! function_exists('show_error_dckc')) {
+    /**
+     * Show Error
+     */
+    function show_error_dckc($code, $message)
+    {
+        $response = response()->json([
+            'error' => true,
+            'errCode' => $code,
+            'msg' => $message
+        ]);
+        $response->header('X-'.config('app.name').'-ErrorCode', $code);
+        $response->header('X-'.config('app.name').'-ErrorDesc', urlencode($message));
+        return $response;
+    }
+}
 
 if (! function_exists('make_semiangle')) {
 
