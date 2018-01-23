@@ -18,7 +18,7 @@ class OpenidAuthenticate
     public function handle($request, Closure $next){
         $userinfo = WxOpenid::authorization();
         if( !$userinfo ){
-            return false;
+            return show_error(10001, trans('openid or accesstoken error'));
         }
         return $next($request);
 

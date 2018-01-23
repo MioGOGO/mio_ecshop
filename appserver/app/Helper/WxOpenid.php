@@ -17,14 +17,14 @@ class WxOpenid
 
     public static function authorization(){
         $openid = app('request')->header('X-'.config('app.name').'-Authorization');
-        $openid = app('request')->request->get('openid');
+        $open_id = app('request')->request->get('open_id');
         $access_token = app('request')->request->get('access_token');
-        if( !$openid || !$access_token ){
+        if( !$open_id || !$access_token ){
             return false;
         }
-        Log::debug('Wx_openid_Authorization', ['openid' => $openid,'access_token' => $access_token]);
+        Log::debug('Wx_openid_Authorization', ['open_id' => $open_id,'access_token' => $access_token]);
 
-        $info = self::getWxUserinfoByOpenid( $access_token,$openid );
+        $info = self::getWxUserinfoByOpenid( $access_token,$open_id );
         if( !$info ){
             return false;
         }
