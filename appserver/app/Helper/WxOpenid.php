@@ -8,17 +8,21 @@
 
 namespace App\Helper;
 
+use Log;
+
 
 class WxOpenid
 {
 
 
     public static function authorization(){
-        $token = app('request')->header('X-'.config('app.name').'-Authorization');
-        $openid = app('request');
-        echo 'flag'."<br>";
-        var_dump( $openid );exit;
-        Log::debug('Authorization', ['token' => $token]);
+        $openid = app('request')->header('X-'.config('app.name').'-Authorization');
+        $openid = app('request')->request->get('openid');
+        if( !$openid ){
+            return false;
+        }
+        echo $openid;
+        Log::debug('Wx_openid_Authorization', ['openid' => $openid]);
 
 
     }
