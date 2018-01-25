@@ -60,7 +60,7 @@ class OrderController extends Controller
             return $error;
         }
 
-        print_r( $data );exit;
+        print_r( $this->datavalid );exit;
 
 
 
