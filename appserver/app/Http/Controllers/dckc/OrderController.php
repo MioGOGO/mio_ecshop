@@ -12,6 +12,7 @@ namespace App\Http\Controllers\dckc;
 use App\Http\Controllers\Controller;
 use App\Models\dckc\Member;
 use Validator;
+use App\Models\BaseModel;
 
 
 
