@@ -75,15 +75,19 @@ class OrderController extends Controller
      */
     public function vaidJsonOrderParsmrs( array $decodeJson,$rules,$flag = false)
     {
-        if( count( $decodeJson )  == count( $decodeJson,1 ) ){
+        if( $flag ){
             $validator = Validator::make($decodeJson, $rules);
         }else{
-            foreach ( $decodeJson as $val ){
-                $validator = Validator::make($val, $rules);
-                if( $validator->fails() ){
-                    return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
+            if( count( $decodeJson )  !== count( $decodeJson,1 ) ){
+            }else{
+                foreach ( $decodeJson as $val ){
+                    $validator = Validator::make($val, $rules);
+                    if( $validator->fails() ){
+                        return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
+                    }
                 }
             }
+
         }
         if ($validator->fails()) {
             return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
