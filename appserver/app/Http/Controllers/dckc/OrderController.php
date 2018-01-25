@@ -40,6 +40,9 @@ class OrderController extends Controller
             'payType'   => 'required|string|min:1',
 
         ];
+        if( !json_decode( $this->validated['params'],true ) ){
+            return self::jsondckc(BaseModel::formatErrorDckc(10032, 'json format error'));
+        }
         if( $data = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['params'],true ),$rulesJson ) ){
             return $data;
         }
