@@ -19,6 +19,8 @@ use App\Models\BaseModel;
 class OrderController extends Controller
 {
 
+    private $datavalid;
+
     public function add(){
         $rules = [
             'access_token'  => 'required|string|min:1',
@@ -43,7 +45,7 @@ class OrderController extends Controller
         if( !json_decode( $this->validated['params'],true ) ){
             return self::jsondckc(BaseModel::formatErrorDckc(10032, 'json format error'));
         }
-        if( $data = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['params'],true ),$rulesJson ) ){
+        if( $data = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['params'],true ),$rulesJson,true ) ){
             return $data;
         }
         if( !isset( $data['goodsList'] )  ){
@@ -71,15 +73,17 @@ class OrderController extends Controller
      * @param  array $rules
      * @return response
      */
-    public function vaidJsonOrderParsmrs( array $decodeJson,$rules)
+    public function vaidJsonOrderParsmrs( array $decodeJson,$rules,$flag = false)
     {
         $validator = Validator::make($decodeJson, $rules);
         if ($validator->fails()) {
             return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
         } else {
-            $res = array_intersect_key($decodeJson, $rules);
-            $res = $decodeJson ;
-            return $res;
+            if( $flag ){
+                $this->datavalid = array_intersect_key($decodeJson, $rules);
+                $this->datavalid = $decodeJson ;
+            }
+            return false;
         }
     }
 
