@@ -48,7 +48,7 @@ class OrderController extends Controller
         if( $data = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['params'],true ),$rulesJson,true ) ){
             return $data;
         }
-        if( !isset( $data['goodsList'] )  ){
+        if( !isset( $this->datavalid['goodsList'] )  ){
             return self::jsondckc(BaseModel::formatErrorDckc(10033, 'goodsList is not exists'));
         }
         $goodlistvalid = [
@@ -56,7 +56,7 @@ class OrderController extends Controller
             'amount'    => 'required|min:1',
             'fee'    => 'required|min:1',
         ];
-        if( $error = $this->vaidJsonOrderParsmrs( $data['goodsList'],$goodlistvalid ) ){
+        if( $error = $this->vaidJsonOrderParsmrs( $this->datavalid['goodsList'],$goodlistvalid ) ){
             return $error;
         }
 
