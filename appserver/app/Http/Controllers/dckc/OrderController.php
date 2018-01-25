@@ -86,7 +86,6 @@ class OrderController extends Controller
             }
         }else{
             if( count( $decodeJson )  !== count( $decodeJson,1 ) ){
-            }else{
                 foreach ( $decodeJson as $val ){
                     $validator = Validator::make($val, $rules);
                     if( $validator->fails() ){
