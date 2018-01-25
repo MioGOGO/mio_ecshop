@@ -68,7 +68,7 @@ class OrderController extends Controller
      * @param  array $rules
      * @return response
      */
-    public function vaidJsonOrderParsmrs($decodeJson,$rules)
+    public function vaidJsonOrderParsmrs( array $decodeJson,$rules)
     {
         $validator = Validator::make($decodeJson, $rules);
         if ($validator->fails()) {
