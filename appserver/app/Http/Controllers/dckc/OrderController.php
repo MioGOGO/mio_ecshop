@@ -35,20 +35,30 @@ class OrderController extends Controller
         $rulesJson = [
             'address'   => 'required|string|min:1',
             'dishTime'  => 'required|string|min:1',
-            'goodsList' => 'required|string|min:1',
-            'totalFee'  => 'required|string|min:1',
+            'totalFee'  => 'required|min:1',
             'note'      => 'required|string|min:1',
             'payType'   => 'required|string|min:1',
 
         ];
-        if( $error = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['params'],true ),$rulesJson ) ){
+        if( $data = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['params'],true ),$rulesJson ) ){
+            return $data;
+        }
+        if( !isset( $data['goodsList'] )  ){
+            return self::jsondckc(BaseModel::formatErrorDckc(10033, 'goodsList is not exists'));
+        }
+        $goodlistvalid = [
+            'id'    => 'required|min:1',
+            'amount'    => 'required|min:1',
+            'fee'    => 'required|min:1',
+        ];
+        if( $error = $this->vaidJsonOrderParsmrs( $data['goodsList'],$goodlistvalid ) ){
             return $error;
         }
 
+        print_r( $data );exit;
 
 
 
-        print_r( $error );
 
     }
 
@@ -66,7 +76,7 @@ class OrderController extends Controller
         } else {
             $res = array_intersect_key($decodeJson, $rules);
             $res = $decodeJson ;
-            return false;
+            return $res;
         }
     }
 
