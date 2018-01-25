@@ -431,6 +431,42 @@ class Member extends BaseModel {
         return self::formatError(self::BAD_REQUEST, trans('message.email.error'));
     }
 
+    public static function authDckc( array $attributes ){
+        extract($attributes);
+        $userinfo = null;
+        $userinfo = self::getUserByWeixin($access_token, $open_id);
+
+        if (!$userinfo) {
+            return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
+        }
+
+        $is_new_user = false;
+        if (!$user_id = self::checkBind($open_id)) {
+            // create user
+            $model = self::createAuthUser(1, $open_id, $userinfo['nickname'], $userinfo['gender'], $userinfo['prefix'], $userinfo['avatar']);
+
+            if (!$model) {
+                return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
+            }
+
+            $user_id = $model->user_id;
+            $is_new_user = true;
+
+        } else {
+            UserRegStatus::toUpdate($user_id, 1);
+        }
+
+//        if (isset($device_id) && $device_id) {
+//            Device::toUpdateOrCreate($user_id, $attributes);
+//        }
+        if(!isset($open_id)){
+            $open_id = '';
+        }
+        // login
+        return self::formatBodyDckc(['token' => Token::encode(['uid' => $user_id]), 'user' => Member::where('user_id', $user_id)->first(),'openid'=>$open_id,'is_new_user' => $is_new_user]
+        );
+
+    }
     public static function auth(array $attributes)
     {
         extract($attributes);

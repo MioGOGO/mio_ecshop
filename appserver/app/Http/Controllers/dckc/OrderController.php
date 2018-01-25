@@ -9,7 +9,9 @@
 namespace App\Http\Controllers\dckc;
 
 
+use App\Helper\Token;
 use App\Http\Controllers\Controller;
+use App\Models\dckc\Member;
 
 class OrderController extends Controller
 {
@@ -24,9 +26,14 @@ class OrderController extends Controller
         if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
-        echo 'flag'."<br>";
 
-        print_r( $requests = $this->request->all() );
+        $userinfo = Member::authDckc( $this->validated );
+
+        $decodeJson = Token::jsonDecode( $this->validated['params'] );
+
+
+
+        print_r( $decodeJson );
 
     }
 

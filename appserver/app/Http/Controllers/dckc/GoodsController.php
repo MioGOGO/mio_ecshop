@@ -25,7 +25,7 @@ class GoodsController extends Controller
         $rules = [
             'when' => 'required|string|min:1',
         ];
-        if ($error = $this->validateInput($rules)) {
+        if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
         $data = Goods::getHomeList($this->validated);
@@ -43,7 +43,7 @@ class GoodsController extends Controller
         $rules = [
             'id' => 'required|integer|min:1',
         ];
-        if ($error = $this->validateInput($rules)) {
+        if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
 

@@ -36,6 +36,11 @@ class BaseModel extends Model
         $data['error_code'] = 0;
         return $data;
     }
+    public static function formatBodyDckc(array $data = [])
+    {
+        $data['errCode'] = 0;
+        return $data;
+    }
 
     public static function formatError($code, $message = null)
     {

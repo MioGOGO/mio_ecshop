@@ -53,7 +53,7 @@ class Goods extends BaseModel
     {
         extract( $attributes );
         $infos = GoodsCategory::getCategorybykeyword( [ $when.'GoodsList' ] );
-        return self::formatBody([
+        return self::formatBodyDckc([
             $when.'GoodsList' => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
         ]);
     }
@@ -73,11 +73,11 @@ class Goods extends BaseModel
         $data = $model->with(['properties', 'tags', 'stock', 'attachments'])->first();
 
         if (!$data) {
-            return self::formatError(self::NOT_FOUND);
+            return self::formatErrorDckc(self::NOT_FOUND);
         }
 
         if (!$data->is_on_sale) {
-            return self::formatError(self::BAD_REQUEST, trans('message.good.off_sale'));
+            return self::formatErrorDckc(self::BAD_REQUEST, trans('message.good.off_sale'));
         }
         $infos = Attribute::get_goods_attr_info_byid( $id );
         $headerImg = GoodsGallery::getPhotoById($data->goods_id,'headerImg');
@@ -94,7 +94,7 @@ class Goods extends BaseModel
 //            return self::formatBody(['product' => array_merge($data->toArray(), ['current_price' => $current_price])]);
 //        }
         extract( $infos );
-        return self::formatBody([
+        return self::formatBodyDckc([
             'data' => $data,
             'nutrient'=> [ 'entree' => isset($entree) ? $entree : array(),
                 'dish' => isset($dish) ? $dish : array(),
