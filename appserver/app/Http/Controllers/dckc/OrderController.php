@@ -77,6 +77,13 @@ class OrderController extends Controller
     {
         if( $flag ){
             $validator = Validator::make($decodeJson, $rules);
+            if ($validator->fails()) {
+                return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
+            } else {
+                $this->datavalid = array_intersect_key($decodeJson, $rules);
+                $this->datavalid = $decodeJson ;
+                return false;
+            }
         }else{
             if( count( $decodeJson )  !== count( $decodeJson,1 ) ){
             }else{
@@ -88,15 +95,6 @@ class OrderController extends Controller
                 }
             }
 
-        }
-        if ($validator->fails()) {
-            return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
-        } else {
-            if( $flag ){
-                $this->datavalid = array_intersect_key($decodeJson, $rules);
-                $this->datavalid = $decodeJson ;
-            }
-            return false;
         }
     }
 
