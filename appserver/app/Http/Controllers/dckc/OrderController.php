@@ -35,7 +35,9 @@ class OrderController extends Controller
 
         $userinfo = Member::authDckc( $this->validated );
 
-        print_r( $userinfo );exit;
+        if( !$userinfo ){
+            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
+        }
         $rulesJson = [
             'address'   => 'required|string|min:1',
             'dishTime'  => 'required|string|min:1',
@@ -61,8 +63,8 @@ class OrderController extends Controller
         if( $error = $this->vaidJsonOrderParsmrs( $this->datavalid['goodsList'],$goodlistvalid ) ){
             return $error;
         }
-
-        $info = OrderGoods::checkout(  );
+        $this->validated['user_id'] = $userinfo->id;
+        $info = OrderGoods::checkout( $this->validated );
 
         print_r( $this->datavalid );exit;
 

@@ -69,7 +69,7 @@ class UserAddress extends BaseModel
         extract($attributes);
 
         $model = new UserAddress;
-        $model->user_id         = $uid;
+        $model->user_id         = $user_id;
         $model->consignee       = $name;
         $model->email           = '';
         $model->country         = !empty( $arr['country'] ) ? $arr['country'] : '';
