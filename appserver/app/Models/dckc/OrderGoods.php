@@ -303,7 +303,7 @@ class OrderGoods extends BaseModel {
             $order_good->product_id     = 0;
             $order_good->goods_number   = $goods['amount'];
             $order_good->market_price   = $goodInfo->market_price;
-            $order_good->goods_price    = $goodInfo->goods_price;
+            $order_good->goods_price    = $goodInfo->shop_price;
             //$order_good->goods_attr     = $goods->goods_attr;
             $order_good->is_real        = $goodInfo->is_real;
             $order_good->extension_code = $goodInfo->extension_code;
