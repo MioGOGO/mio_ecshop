@@ -86,7 +86,7 @@ class UserAddress extends BaseModel
 
         if ($model->save()){
 
-            $member = Member::where('user_id', $uid)->first();
+            $member = Member::where('user_id', $user_id)->first();
 
             if (!UserAddress::where('address_id', $member->address_id)->first()) {
                 $member->address_id = $model->address_id;
