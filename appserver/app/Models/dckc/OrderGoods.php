@@ -314,10 +314,7 @@ class OrderGoods extends BaseModel {
             $checkTotalPrice += $goods['amount']*$goodInfo->goods_price;
         }
         if( $checkTotalPrice != $totalFee ){
-            $od = new Order;
-            $od->order_status = 3;
-            $od->order_id = $new_order_id;
-            $od->save();
+            Order::updateOrCreate( ['order_id' => $new_order_id, 'order_status' => 3] );
             return self::formatError(10035,'list price ！= totalfee  ');
         };
 
