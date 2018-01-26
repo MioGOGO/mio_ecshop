@@ -316,6 +316,7 @@ class OrderGoods extends BaseModel {
         if( $checkTotalPrice != $totalFee ){
             $od = new Order;
             $od->order_status = 3;
+            $od->order_id = $new_order_id;
             $od->save();
             return self::formatError(10035,'list price ！= totalfee  ');
         };
