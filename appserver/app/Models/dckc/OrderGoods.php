@@ -141,7 +141,7 @@ class OrderGoods extends BaseModel {
     {
 
         $consignee = UserAddress::addDckc( $attributes );
-
+        print_r( $consignee );exit;
         extract($attributes);
         //-- 完成所有订单操作，提交到数据库
         /* 取得购物类型 */
