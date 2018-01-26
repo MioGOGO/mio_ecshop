@@ -140,46 +140,34 @@ class OrderGoods extends BaseModel {
     public static function checkout(array $attributes)
     {
 
-        $consignee = UserAddress::addDckc( $attributes );
-        print_r( $consignee );exit;
         extract($attributes);
+        $consignee = UserAddress::addDckc( $attributes );
         //-- 完成所有订单操作，提交到数据库
         /* 取得购物类型 */
-        $flow_type = self::CART_GENERAL_GOODS;
 
         /* 检查购物车中是否有商品 */
 
-        if (json_decode($cart_good_id,true)) {
-            $cart_good_ids = json_decode($cart_good_id,true);
-        }else{
-            return self::formatError(self::BAD_REQUEST,trans('message.cart.json_invalid'));
+        if ( !isset( $goodsList ) || !is_array( $goodsList ) ) {
+            return self::formatErrorDckc(self::BAD_REQUEST,'product error');
         }
-        if (count($cart_good_ids) > 0) {
-            foreach ($cart_good_ids as $key => $cart_id) {
-                if (!Cart::find($cart_id)) {
-                    return self::formatError(self::BAD_REQUEST,trans('message.cart.cart_goods_error'));
-                }
-            }
-        }else{
-            return self::formatError(self::BAD_REQUEST,trans('message.cart.no_goods'));
-        }
+        $goodsArray = array_column( $goodsList,'id' );
         /* 检查商品库存 */
         /* 如果使用库存，且下订单时减库存，则减少库存 */
-        if (ShopConfig::findByCode('use_storage') == '1')
-        {
-            $cart_goods_stock = self::get_cart_goods($cart_good_ids);
-            $_cart_goods_stock = array();
-            foreach ($cart_goods_stock['goods_list'] as $value)
-            {
-                $_cart_goods_stock[$value['rec_id']] = $value['goods_number'];
-            }
-
-            if (!self::flow_cart_stock($_cart_goods_stock)) {
-                return self::formatError(self::BAD_REQUEST,trans('message.good.out_storage'));
-            }
-
-            unset($cart_goods_stock, $_cart_goods_stock);
-        }
+//        if (ShopConfig::findByCode('use_storage') == '1')
+//        {
+//            $cart_goods_stock = self::get_cart_goods($cart_good_ids);
+//            $_cart_goods_stock = array();
+//            foreach ($cart_goods_stock['goods_list'] as $value)
+//            {
+//                $_cart_goods_stock[$value['rec_id']] = $value['goods_number'];
+//            }
+//
+//            if (!self::flow_cart_stock($_cart_goods_stock)) {
+//                return self::formatError(self::BAD_REQUEST,trans('message.good.out_storage'));
+//            }
+//
+//            unset($cart_goods_stock, $_cart_goods_stock);
+//        }
 
 
         $consignee_info = UserAddress::get_consignee($consignee);
@@ -192,10 +180,9 @@ class OrderGoods extends BaseModel {
         $inv_payee = isset($invoice_title) ? $invoice_title : ShopConfig::findByCode('invoice_title');//发票抬头
         $inv_content = isset($invoice_content) ? $invoice_content : ShopConfig::findByCode('invoice_content') ;
         $postscript = isset($comment) ? $comment : '';
-        $user_id = Token::authorization();
 
         $order = array(
-            'shipping_id'     => intval($shipping),
+            'shipping_id'     => intval(0),
             'pay_id'          => intval(0),
             'pack_id'         => isset($_POST['pack']) ? intval($_POST['pack']) : 0,//包装id
             'card_id'         => isset($_POST['card']) ? intval($_POST['card']) : 0,//贺卡id
@@ -218,6 +205,8 @@ class OrderGoods extends BaseModel {
             'pay_status'      => Order::PS_UNPAYED,
             'agency_id'       => 0 ,//办事处的id
         );
+
+        print_r( $order );exit;
 
         /* 扩展信息 */
         $order['extension_code'] = '';
