@@ -465,8 +465,7 @@ class Member extends BaseModel {
         }
         $user_id = '1';
         // login
-        return self::formatBodyDckc(['user' => Member::where('user_id', $user_id)->first(),'openid'=>$open_id,'is_new_user' => $is_new_user]
-        );
+        return Member::where('user_id', $user_id)->first();
 
     }
     public static function auth(array $attributes)
