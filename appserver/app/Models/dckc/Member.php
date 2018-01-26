@@ -440,7 +440,7 @@ class Member extends BaseModel {
 //            return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
 //        }
 //
-//        $is_new_user = false;
+        $is_new_user = false;
 //        if (!$user_id = self::checkBind($open_id)) {
 //            // create user
 //            $model = self::createAuthUser(1, $open_id, $userinfo['nickname'], $userinfo['gender'], $userinfo['prefix'], $userinfo['avatar']);
