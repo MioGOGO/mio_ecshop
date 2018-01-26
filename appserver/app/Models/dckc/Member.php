@@ -434,27 +434,27 @@ class Member extends BaseModel {
     public static function authDckc( array $attributes ){
         extract($attributes);
         $userinfo = null;
-        $userinfo = self::getUserByWeixin($access_token, $open_id);
-
-        if (!$userinfo) {
-            return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
-        }
-
-        $is_new_user = false;
-        if (!$user_id = self::checkBind($open_id)) {
-            // create user
-            $model = self::createAuthUser(1, $open_id, $userinfo['nickname'], $userinfo['gender'], $userinfo['prefix'], $userinfo['avatar']);
-
-            if (!$model) {
-                return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
-            }
-
-            $user_id = $model->user_id;
-            $is_new_user = true;
-
-        } else {
-            UserRegStatus::toUpdate($user_id, 1);
-        }
+//        $userinfo = self::getUserByWeixin($access_token, $open_id);
+//
+//        if (!$userinfo) {
+//            return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
+//        }
+//
+//        $is_new_user = false;
+//        if (!$user_id = self::checkBind($open_id)) {
+//            // create user
+//            $model = self::createAuthUser(1, $open_id, $userinfo['nickname'], $userinfo['gender'], $userinfo['prefix'], $userinfo['avatar']);
+//
+//            if (!$model) {
+//                return self::formatErrorDckc(self::BAD_REQUEST, trans('message.member.auth.error'));
+//            }
+//
+//            $user_id = $model->user_id;
+//            $is_new_user = true;
+//
+//        } else {
+//            UserRegStatus::toUpdate($user_id, 1);
+//        }
 
 //        if (isset($device_id) && $device_id) {
 //            Device::toUpdateOrCreate($user_id, $attributes);
