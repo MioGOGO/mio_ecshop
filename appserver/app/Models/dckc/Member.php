@@ -459,11 +459,13 @@ class Member extends BaseModel {
 //        if (isset($device_id) && $device_id) {
 //            Device::toUpdateOrCreate($user_id, $attributes);
 //        }
+
         if(!isset($open_id)){
             $open_id = '';
         }
+        $user_id = '1';
         // login
-        return self::formatBodyDckc(['token' => Token::encode(['uid' => $user_id]), 'user' => Member::where('user_id', $user_id)->first(),'openid'=>$open_id,'is_new_user' => $is_new_user]
+        return self::formatBodyDckc(['user' => Member::where('user_id', $user_id)->first(),'openid'=>$open_id,'is_new_user' => $is_new_user]
         );
 
     }

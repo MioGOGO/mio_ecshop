@@ -11,6 +11,7 @@ namespace App\Http\Controllers\dckc;
 
 use App\Http\Controllers\Controller;
 use App\Models\dckc\Member;
+use App\Models\dckc\OrderGoods;
 use Validator;
 use App\Models\BaseModel;
 
@@ -34,6 +35,7 @@ class OrderController extends Controller
 
         $userinfo = Member::authDckc( $this->validated );
 
+        print_r( $userinfo );exit;
         $rulesJson = [
             'address'   => 'required|string|min:1',
             'dishTime'  => 'required|string|min:1',
@@ -60,7 +62,11 @@ class OrderController extends Controller
             return $error;
         }
 
+        $info = OrderGoods::checkout(  );
+
         print_r( $this->datavalid );exit;
+
+
 
 
 
