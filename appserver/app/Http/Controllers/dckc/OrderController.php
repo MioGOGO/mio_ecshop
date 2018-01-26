@@ -63,8 +63,8 @@ class OrderController extends Controller
         if( $error = $this->vaidJsonOrderParsmrs( $this->datavalid['goodsList'],$goodlistvalid ) ){
             return $error;
         }
-        $this->validated['user_id'] = $userinfo->id;
-        $info = OrderGoods::checkout( $this->validated );
+        $this->datavalid['user_id'] = $userinfo->id;
+        $info = OrderGoods::checkout( $this->datavalid );
 
         print_r( $this->datavalid );exit;
 
