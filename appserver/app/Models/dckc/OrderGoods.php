@@ -3,7 +3,7 @@
 namespace App\Models\dckc;
 use App\Models\BaseModel;
 
-use App\Helper\Token;
+use App\Services\Shopex\Erp;
 
 
 class OrderGoods extends BaseModel {
@@ -150,7 +150,7 @@ class OrderGoods extends BaseModel {
         if ( !isset( $goodsList ) || !is_array( $goodsList ) ) {
             return self::formatErrorDckc(self::BAD_REQUEST,'product error');
         }
-        $goodsArray = array_column( $goodsList,'id' );
+        //$goodsArray = array_column( $goodsList,'id' );
         /* 检查商品库存 */
         /* 如果使用库存，且下订单时减库存，则减少库存 */
 //        if (ShopConfig::findByCode('use_storage') == '1')
@@ -206,84 +206,16 @@ class OrderGoods extends BaseModel {
             'agency_id'       => 0 ,//办事处的id
         );
 
-        print_r( $order );exit;
 
         /* 扩展信息 */
         $order['extension_code'] = '';
         $order['extension_id'] = 0;
 
-        /* 订单中的商品 */
-        $cart_goods = self::cart_goods($flow_type, $cart_good_ids);
-        if (empty($cart_goods))
-        {
-            return self::formatError(self::BAD_REQUEST, trans('message.cart.no_goods'));
-        }
 
-        /* 检查积分余额是否合法 */
-        if ($user_id > 0)
-        {
-            $user_info = Member::user_info($user_id);
 
-            $order['surplus'] = min($order['surplus'], $user_info['user_money'] + $user_info['credit_line']);
-            if ($order['surplus'] < 0)
-            {
-                $order['surplus'] = 0;
-            }
 
-            // 查询用户有多少积分
-            $total_integral = 0;
-            foreach ($cart_goods as $goods) {
-                $integral = Goods::where('goods_id', $goods['goods_id'])->value('integral');
-                $total_integral = $total_integral + $integral * $goods['goods_number'];
-            }
 
-            $scale = ShopConfig::findByCode('integral_scale');
 
-            if($scale > 0){
-                $flow_points = $total_integral / ($scale / 100);
-            }else{
-                $flow_points = 0;
-            }
-
-            $user_points = $user_info['pay_points']; // 用户的积分总数
-
-            $order['integral'] = min($order['integral'], $user_points, $flow_points);
-            if ($order['integral'] < 0)
-            {
-                $order['integral'] = 0;
-            }
-        }
-        else
-        {
-            $order['surplus']  = 0;
-            $order['integral'] = 0;
-        }
-
-        /* 检查红包是否存在 */
-        if ($order['bonus_id'] > 0)
-        {
-            $bonus = BonusType::bonus_info($order['bonus_id']);
-
-            if (empty($bonus) || $bonus['user_id'] != $user_id || $bonus['order_id'] > 0 || $bonus['min_goods_amount'] > self::cart_amount(true, $flow_type))
-            {
-                $order['bonus_id'] = 0;
-            }
-        }
-
-        /* 订单中的商品 */
-        $cart_goods = self::cart_goods($flow_type,$cart_good_ids);
-        if (empty($cart_goods))
-        {
-            return self::formatError(self::BAD_REQUEST,trans('message.cart.no_goods'));
-        }
-
-        /* 检查商品总额是否达到最低限购金额 */
-        // app和web有区别，购物车到结算不同
-        // app 可以选择要结算的商品
-        if ($flow_type == self::CART_GENERAL_GOODS && self::getCartAmount($cart_good_ids) < ShopConfig::findByCode('min_goods_amount'))
-        {
-            return self::formatError(self::BAD_REQUEST,trans('message.good.min_goods_amount'));
-        }
         /* 收货人信息 */
         $order['consignee'] = $consignee_info->consignee;
         $order['country'] = $consignee_info->country;
@@ -294,49 +226,16 @@ class OrderGoods extends BaseModel {
         $order['zipcode'] = $consignee_info->zipcode;
         $order['district'] = $consignee_info->district;
         $order['address'] = $consignee_info->address;
-        /* 判断是不是实体商品 */
-        foreach ($cart_goods AS $val)
-        {
-            /* 统计实体商品的个数 */
-            if ($val['is_real'])
-            {
-                $is_real_good=1;
-            }
-        }
-        if(isset($is_real_good))
-        {
-            $shipping_is_real = Shipping::where('shipping_id',$order['shipping_id'])->where('enabled',1)->first();
-            if(!$shipping_is_real)
-            {
-                return self::formatError(self::BAD_REQUEST, '您必须选定一个配送方式');
-            }
-        }
+
         /* 订单中的总额 */
-        $total = Order::order_fee($order, $cart_goods, $consignee_info,$cart_good_id,$shipping,$consignee);
-        /* 红包 */
-        if (!empty($order['bonus_id']))
-        {
-            $bonus          = BonusType::bonus_info($order['bonus_id']);
-            $total['bonus'] = $bonus['type_money'];
-        }
-        // $total['bonus_formated'] = Goods::price_format($total['bonus'], false);
 
-        $order['bonus']        = isset($bonus)? $bonus['type_money'] : '';
 
-        $order['goods_amount'] = $total['goods_price'];
-        $order['discount']     = $total['discount'];
-        $order['surplus']      = $total['surplus'];
-        $order['tax']          = $total['tax'];
+        $order['goods_amount'] = $totalFee;
+        $order['discount']     = 0;
+        $order['surplus']      = 0;
+        $order['tax']          = 0;
 
-        // 购物车中的商品能享受红包支付的总额
-        $discount_amout = self::compute_discount_amount($cart_good_ids);
-        // 红包和积分最多能支付的金额为商品总额
-        $temp_amout = $order['goods_amount'] - $discount_amout;
 
-        if ($temp_amout <= 0)
-        {
-            $order['bonus_id'] = 0;
-        }
 
         /* 配送方式 */
         if ($order['shipping_id'] > 0)
@@ -346,23 +245,14 @@ class OrderGoods extends BaseModel {
                 ->first();
             $order['shipping_name'] = addslashes($shipping['shipping_name']);
         }
-        $order['shipping_fee'] = $total['shipping_fee'];
+        $order['shipping_fee'] = 0;
         $order['insure_fee']   = 0;
-        /* 支付方式 */
-        if ($order['pay_id'] > 0)
-        {
-            $payment = payment_info($order['pay_id']);
-            $order['pay_name'] = addslashes($payment['pay_name']);
-        }
-        $order['pay_fee'] = $total['pay_fee'];
-        $order['cod_fee'] = $total['cod_fee'];
 
-        /* 商品包装 */
 
-        /* 祝福贺卡 */
+
 
         /* 如果全部使用余额支付，检查余额是否足够 没有余额支付*/
-        $order['order_amount']  = number_format($total['amount'], 2, '.', '');
+        $order['order_amount']  = number_format($totalFee, 2, '.', '');
 
         /* 如果订单金额为0（使用余额或积分或红包支付），修改订单状态为已确认、已付款 */
         if ($order['order_amount'] <= 0)
@@ -373,9 +263,6 @@ class OrderGoods extends BaseModel {
             $order['pay_time']     = time();
             $order['order_amount'] = 0;
         }
-
-        $order['integral_money']   = $total['integral_money'];
-        $order['integral']         = $total['integral'];
 
         $order['parent_id'] = 0;
 
@@ -402,100 +289,96 @@ class OrderGoods extends BaseModel {
         $order['order_id'] = $new_order_id;
 
         /* 插入订单商品 */
-        $cart_goods = Cart::whereIn('rec_id',$cart_good_ids)->where('rec_type',$flow_type)->get();
-        foreach ($cart_goods as $key => $cart_good) {
+        $checkTotalPrice = 0;
+        foreach ($goodsList as $key => $goods) {
+            $goodInfo = Goods::where(['is_delete' => 0, 'goods_id' => $goods['id']])->first();
+            if( !$goodInfo ){
+                return self::formatError(self::BAD_REQUEST,'goods  not exists');
+            }
             $order_good                 = new OrderGoods;
             $order_good->order_id       = $new_order_id;
-            $order_good->goods_id       = $cart_good->goods_id;
-            $order_good->goods_name     = $cart_good->goods_name;
-            $order_good->goods_sn       = $cart_good->goods_sn;
-            $order_good->product_id     = $cart_good->product_id;
-            $order_good->goods_number   = $cart_good->goods_number;
-            $order_good->market_price   = $cart_good->market_price;
-            $order_good->goods_price    = $cart_good->goods_price;
-            $order_good->goods_attr     = $cart_good->goods_attr;
-            $order_good->is_real        = $cart_good->is_real;
-            $order_good->extension_code = $cart_good->extension_code;
-            $order_good->parent_id      = $cart_good->parent_id;
-            $order_good->is_gift        = $cart_good->is_gift;
-            $order_good->goods_attr_id  = $cart_good->goods_attr_id;
+            $order_good->goods_id       = $goodInfo->goods_id;
+            $order_good->goods_name     = $goodInfo->goods_name;
+            $order_good->goods_sn       = $goodInfo->goods_sn;
+            $order_good->product_id     = 0;
+            $order_good->goods_number   = $goods['amount'];
+            $order_good->market_price   = $goodInfo->market_price;
+            $order_good->goods_price    = $goodInfo->goods_price;
+            //$order_good->goods_attr     = $goods->goods_attr;
+            $order_good->is_real        = $goodInfo->is_real;
+            $order_good->extension_code = $goodInfo->extension_code;
+            //$order_good->parent_id      = $goods->parent_id;
+            //$order_good->is_gift        = $goods->is_gift;
+            //$order_good->goods_attr_id  = $goods->goods_attr_id;
             $order_good->save();
+            $checkTotalPrice += $goods['amount']*$goodInfo->goods_price;
         }
+        if( $checkTotalPrice != $totalFee ){
+            return self::formatError(10035,'list price ！= totalfee  ');
+        };
 
         /* 修改拍卖活动状态 */
 
         /* 处理余额、积分、红包 */
 
-        if ($order['user_id'] > 0 && $order['integral'] > 0)
-        {
-            AccountLog::logAccountChange(0, 0, 0, $order['integral'] * (-1), trans('message.score.pay'), $order['order_sn']);
-        }
-
-
-        if ($order['bonus_id'] > 0 && $temp_amout > 0)
-        {
-            UserBonus::useBonus($order['bonus_id'], $new_order_id);
-        }
 
         /* 如果使用库存，且下订单时减库存，则减少库存 */
-        if (ShopConfig::findByCode('use_storage') == '1' && ShopConfig::findByCode('stock_dec_time') == self::SDT_PLACE)
+        if (ShopConfig::findByCode('use_storage') == '1' && ShopConfig::findByCode('stock_dec_time') == '1')
         {
-            Order::change_order_goods_storage($order['order_id'], true, self::SDT_PLACE);
+            Order::change_order_goods_storage($order['order_id'], true, 1);
         }
 
         /* 给商家发邮件 */
         /* 增加是否给客服发送邮件选项 */
         /* 如果需要，发短信 */
         /* 如果订单金额为0 处理虚拟卡 */
-        if ($order['order_amount'] <= 0)
-        {
-            $res = self::where('is_real',0)
-                ->where('extension_code','virtual_card')
-                ->where('rec_type','flow_type')
-                ->selectRaw('goods_id,goods_name,goods_number as num')
-                ->get();
-
-            $virtual_goods = array();
-            foreach ($res AS $row)
-            {
-                $virtual_goods['virtual_card'][] = array('goods_id' => $row['goods_id'], 'goods_name' => $row['goods_name'], 'num' => $row['num']);
-            }
-
-            if ($virtual_goods AND $flow_type != self::CART_GROUP_BUY_GOODS)
-            {
-                /* 虚拟卡发货 */
-                if (virtual_goods_ship($virtual_goods,$msg, $order['order_sn'], true))
-                {
-                    /* 如果没有实体商品，修改发货状态，送积分和红包 */
-                    $get_count = OrderGoods::where('order_id',$order['order_id'])
-                        ->where('is_real',1)
-                        ->count();
-
-                    if ($get_count <= 0)
-                    {
-                        /* 修改订单状态 */
-                        update_order($order['order_id'], array('shipping_status' => SS_SHIPPED, 'shipping_time' => time()));
-
-                        /* 如果订单用户不为空，计算积分，并发给用户；发红包 */
-                        if ($order['user_id'] > 0)
-                        {
-                            /* 取得用户信息 */
-                            $user = Member::user_info($order['user_id']);
-
-                            /* 计算并发放积分 */
-                            $integral = integral_to_give($order);
-                            AccountLog::logAccountChange( 0, 0, intval($integral['rank_points']), intval($integral['custom_points']), trans('message.score.register'), $order['order_sn']);
-
-                            /* 发放红包 */
-                            send_order_bonus($order['order_id']);
-                        }
-                    }
-                }
-            }
-
-        }
-        /* 清空购物车 */
-        self::clear_cart_ids($cart_good_ids,$flow_type);
+//        if ($order['order_amount'] <= 0)
+//        {
+//            $res = self::where('is_real',0)
+//                ->where('extension_code','virtual_card')
+//                ->where('rec_type','flow_type')
+//                ->selectRaw('goods_id,goods_name,goods_number as num')
+//                ->get();
+//
+//            $virtual_goods = array();
+//            foreach ($res AS $row)
+//            {
+//                $virtual_goods['virtual_card'][] = array('goods_id' => $row['goods_id'], 'goods_name' => $row['goods_name'], 'num' => $row['num']);
+//            }
+//
+//            if ($virtual_goods AND $flow_type != self::CART_GROUP_BUY_GOODS)
+//            {
+//                /* 虚拟卡发货 */
+//                if (virtual_goods_ship($virtual_goods,$msg, $order['order_sn'], true))
+//                {
+//                    /* 如果没有实体商品，修改发货状态，送积分和红包 */
+//                    $get_count = OrderGoods::where('order_id',$order['order_id'])
+//                        ->where('is_real',1)
+//                        ->count();
+//
+//                    if ($get_count <= 0)
+//                    {
+//                        /* 修改订单状态 */
+//                        update_order($order['order_id'], array('shipping_status' => SS_SHIPPED, 'shipping_time' => time()));
+//
+//                        /* 如果订单用户不为空，计算积分，并发给用户；发红包 */
+//                        if ($order['user_id'] > 0)
+//                        {
+//                            /* 取得用户信息 */
+//                            $user = Member::user_info($order['user_id']);
+//
+//                            /* 计算并发放积分 */
+//                            $integral = integral_to_give($order);
+//                            AccountLog::logAccountChange( 0, 0, intval($integral['rank_points']), intval($integral['custom_points']), trans('message.score.register'), $order['order_sn']);
+//
+//                            /* 发放红包 */
+//                            send_order_bonus($order['order_id']);
+//                        }
+//                    }
+//                }
+//            }
+//
+//        }
 
         /* 插入支付日志 */
         // $order['log_id'] = insert_pay_log($new_order_id, $order['order_amount'], PAY_ORDER);
@@ -509,7 +392,7 @@ class OrderGoods extends BaseModel {
 
         Erp::order($orderObj->order_sn, 'order_create');
 
-        return self::formatBody(['order' => $orderObj]);
+        return self::formatBodyDckc(['order' => $orderObj]);
     }
 
 }
