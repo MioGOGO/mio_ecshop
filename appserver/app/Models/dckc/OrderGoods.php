@@ -311,7 +311,7 @@ class OrderGoods extends BaseModel {
             //$order_good->is_gift        = $goods->is_gift;
             //$order_good->goods_attr_id  = $goods->goods_attr_id;
             $order_good->save();
-            $checkTotalPrice += $goods['amount']*$goodInfo->goods_price;
+            $checkTotalPrice += $goods['amount']*$goodInfo->shop_price;
         }
         if( $checkTotalPrice != $totalFee ){
             Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
