@@ -26,6 +26,30 @@ class UserAddress extends BaseModel
         return self::formatBody(['consignees' => $data]);
     }
 
+
+    public static function get_consignee_dckc($user_id)
+    {
+        //$uid = Token::authorization();
+        $arr = array();
+        if ($user_id) {
+            return self::where('user_id',$user_id)->first();
+        }
+        if ($uid > 0)
+        {
+            /* 取默认地址 */
+            // $sql = "SELECT ua.*".
+            //         " FROM " . $GLOBALS['ecs']->table('user_address') . "AS ua, ".$GLOBALS['ecs']->table('users').' AS u '.
+            //         " WHERE u.user_id='$uid' AND ua.address_id = u.address_id";
+
+            // $arr = $GLOBALS['db']->getRow($sql);
+            $arr = self::join('users','user_address.address_id', '=', 'users.address_id')
+                ->where('users.user_id',$uid)
+                ->first()->toArray();
+        }
+
+        return $arr;
+    }
+
     public static function get_consignee($consignee)
     {
         $uid = Token::authorization();
@@ -69,24 +93,24 @@ class UserAddress extends BaseModel
         extract($attributes);
 
         $model = new UserAddress;
-        $model->user_id         = $user_id;
-        $model->consignee       = 'dckc'.$user_id;
+        $model->user_id         = $uid;
+        $model->consignee       = $name;
         $model->email           = '';
         $model->country         = 1;
         $model->province        = 2;
         $model->city            = !empty( $arr['city'] ) ? $arr['city'] : '';
         $model->district        = !empty( $arr['region'] ) ? $arr['region'] : '';
-        $model->address         = $address."[".(isset( $otherPoiInfo ) ? strip_tags( $otherPoiInfo ) : '')."]";
-        $model->mobile          = isset($mobile) ? $mobile : '';
+        $model->address         = $address;
+        $model->mobile          = isset($phone) ? $phone : '';
         $model->tel             = isset($tel) ? $tel : '';
         $model->zipcode         = isset($zip_code) ? $zip_code : '';
-        $model->address_name    = '';
-        $model->sign_building   = isset( $poiName ) ? strip_tags( $poiName ) : '';
-        $model->best_time       = $dishTime;
+        $model->address_name    = $poiName;
+        $model->sign_building   = isset( $otherPoiInfo ) ? strip_tags( $otherPoiInfo ) : '';
+        //$model->best_time       = $dishTime;
 
         if ($model->save()){
 
-            $member = Member::where('user_id', $user_id)->first();
+            $member = Member::where('user_id', $uid)->first();
 
             if (!UserAddress::where('address_id', $member->address_id)->first()) {
                 $member->address_id = $model->address_id;

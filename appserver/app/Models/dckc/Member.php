@@ -290,8 +290,8 @@ class Member extends BaseModel {
 
         if ($model = Member::where('user_id', $uid)->first())
         {
-            if (isset($gender)) {
-                $model->sex = $gender;
+            if (isset($sex)) {
+                $model->sex = $sex;
             }
 
             if (isset($name)) {
@@ -302,10 +302,6 @@ class Member extends BaseModel {
                 $model->mobile_phone = intval( $phone );
             }
 
-            if( isset( $address ) ){
-
-                $model->passwd_question = strip_tags( $address.'--'.$subAdd );
-            }
 
             if(isset($avatar_url)){
                 if($avatar = Avatar::where('user_id', $uid)->first()){
@@ -332,6 +328,27 @@ class Member extends BaseModel {
 
             if ($model->save())
             {
+                if($modelAdress = UserAddress::where('user_id',$uid)->first()){
+                    if( isset( $address ) ){
+                        $modelAdress->address = $address;
+                    }
+                    if( isset( $name ) ){
+                        $modelAdress->consignee = $name;
+                    }
+                    if( isset( $otherPoiInfo ) ){
+                        $modelAdress->sign_building = $otherPoiInfo;
+                    }
+                    if( isset( $poiName ) ){
+                        $modelAdress->address_name = $poiName;
+                    }
+                    if( !$modelAdress->save() ){
+                        return self::formatBodyDckc(self::UNKNOWN_ERROR);
+                    }
+                }else{
+                    if( !UserAddress::addDckc( $attributes ) ){
+                        return self::formatBodyDckc(self::UNKNOWN_ERROR);
+                    }
+                }
                 return self::formatBodyDckc(['user' => $model->toArray()]);
 
             }   else {

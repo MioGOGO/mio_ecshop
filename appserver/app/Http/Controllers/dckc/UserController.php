@@ -170,11 +170,12 @@ class UserController extends Controller
 
 
         $rulesJson = [
-            'name'   => 'required|string|min:1',
-            'gender'  => 'required|string|min:1',
-            'phone'  => 'required|min:1',
-            'address'      => 'required|string|min:1',
-            'subAdd'   => 'required|string|min:1',
+            'name'          => 'required|string|min:1',
+            'sex'           => 'required|min:1',
+            'phone'         => 'required|min:1',
+            'address'       => 'required|string|min:1',
+            'poiName'       => 'required|string|min:1',
+            'otherPoiInfo'  => 'required|string|min:1',
 
         ];
         if( !json_decode( $this->validated['param'],true ) ){

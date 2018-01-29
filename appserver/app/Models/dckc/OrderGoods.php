@@ -170,7 +170,7 @@ class OrderGoods extends BaseModel {
 //        }
 
 
-        //$consignee_info = UserAddress::get_consignee($consignee);
+        $consignee_info = UserAddress::get_consignee_dckc($user_id);
 
 //        if (!$consignee_info) {
 //            return self::formatError(self::BAD_REQUEST,trans('message.consignee.not_found'));
@@ -220,15 +220,15 @@ class OrderGoods extends BaseModel {
 
 
         /* 收货人信息 */
-        $order['consignee'] =
-        $order['country'] = '1';
-        $order['province'] = '2';
-        $order['city'] = '37';
-        $order['mobile'] = isset($mobile) ? intval( $mobile ) : '';
-        $order['tel'] = isset($tel) ? intval( $tel ) : '';
+        $order['consignee'] = $consignee_info->consignee;
+        $order['country'] = $consignee_info->country;
+        $order['province'] = $consignee_info->province;
+        $order['city'] = $consignee_info->city;
+        $order['mobile'] = $consignee_info->mobile;
+        //$order['tel'] =
         //$order['zipcode'] = $consignee_info->zipcode;
         //$order['district'] = $consignee_info->district;
-        $order['address'] = isset($address) ? intval( $address ) : '';
+        $order['address'] = $consignee_info->address;
 
         /* 订单中的总额 */
 
