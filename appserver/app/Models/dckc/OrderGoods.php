@@ -393,7 +393,8 @@ class OrderGoods extends BaseModel {
 
         Erp::order($orderObj->order_sn, 'order_create');
 
-        return self::formatBodyDckc(['order' => $orderObj]);
+        Payment::payDckc( [ 'uid'=>$user_id,'order'=>$new_order_id,'openid'=>$open_id ] );
+        //return $orderObj;
     }
 
 }
