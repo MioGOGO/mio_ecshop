@@ -255,15 +255,16 @@ class Payment extends BaseModel {
             ////测试专用
 
             $body = [
-                'appid' => $config['app_id'],
-                'mch_id' => $config['mch_id'],
-                'prepay_id' => 'test',
-                'nonce_str' => $nonce_str,
-                'timestamp' => $time_stamp,
-                'packages' => 'prepay_id=test',
-                'sign' => 'ddddddddd',
+                'appId' => $config['app_id'],
+                'mchId' => $config['mch_id'],
+                'prepayId' => 'test',
+                'nonceStr' => $nonce_str,
+                'timeStamp' => $time_stamp,
+                'package' => 'prepay_id=test',
+                'paySign' => 'ddddddddd',
+                'signType' => 'MD5'
             ];
-            return self::formatBodyDckc(['order' => $order, 'wxpay' => $body]);
+            return self::formatBodyDckc(['data' => $body]);
 
 
 
@@ -288,13 +289,13 @@ class Payment extends BaseModel {
             $sign = $wxpay->createMd5Sign($prePayParams);
 
             $body = [
-                'appid' => $config['app_id'],
-                'mch_id' => $config['mch_id'],
-                'prepay_id' => $prepayid,
-                'nonce_str' => $nonce_str,
-                'timestamp' => $time_stamp,
-                'packages' => $pack,
-                'sign' => $sign,
+                'appId' => $config['app_id'],
+                'mchId' => $config['mch_id'],
+                'prepayId' => $prepayid,
+                'nonceStr' => $nonce_str,
+                'timeStamp' => $time_stamp,
+                'package' => $pack,
+                'paySign' => $sign,
             ];
 
             return self::formatBodyDckc(['order' => $order, 'wxpay' => $body]);
