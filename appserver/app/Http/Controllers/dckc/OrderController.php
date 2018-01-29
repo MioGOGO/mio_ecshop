@@ -14,6 +14,7 @@ use App\Models\dckc\Member;
 use App\Models\dckc\OrderGoods;
 use Validator;
 use App\Models\BaseModel;
+use App\Models\dckc\Payment;
 
 
 
@@ -73,6 +74,13 @@ class OrderController extends Controller
 
 
 
+    }
+    /**
+     * POST /order/notify/:code
+     */
+    public function notify($code)
+    {
+        Payment::notify($code);
     }
 
 

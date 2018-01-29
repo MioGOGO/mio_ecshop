@@ -27,6 +27,12 @@ $app->group(['namespace' => 'App\Http\Controllers\v2', 'prefix' => 'v2'], functi
 
 });
 
+
+$app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'middleware' => ['xss']],function ($app){
+    $app->get('order/notify/{code}','OrderController@notify');
+
+});
+
 //dckc guset
 $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'middleware' => ['xss']],function($app){
     $app->get('goods/list','GoodsController@getlist');
