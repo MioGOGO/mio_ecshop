@@ -121,6 +121,24 @@ class Order extends BaseModel {
         return self::formatBody(['orders' => $data['data'],'paged' => self::formatPaged($page, $per_page, $total)]);
     }
 
+    public static function getListDckc(array $attributes)
+    {
+        extract($attributes);
+        //$uid = Token::authorization();
+
+        $model = self::where(['user_id' => $uid]);
+
+        $model->whereIn('pay_status', [self::PS_UNPAYED, self::PS_PAYING,self::PS_PAYED]);
+        $model->whereNotIn('order_status', [self::OS_INVALID, self::OS_RETURNED,self::OS_SPLITED,self::OS_SPLITING_PART]);
+
+
+        $data = $model
+            ->with('goods')
+            ->orderBy('add_time', 'DESC')->toArray();
+
+        print_r( $data );exit;
+        return self::formatBody(['orders' => $data['data']]);
+    }
     public static function getInfo(array $attributes)
     {
         extract($attributes);

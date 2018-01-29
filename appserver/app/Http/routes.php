@@ -43,6 +43,7 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
 $app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss','openid']], function($app)
 {
     $app->get('order/create', 'OrderController@add');
+    $app->get('order/list', 'OrderController@orderlist');
     $app->get('userinfo/update','UserController@updateProfileDckc');
 });
 

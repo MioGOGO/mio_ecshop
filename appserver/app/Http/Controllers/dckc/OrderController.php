@@ -11,6 +11,7 @@ namespace App\Http\Controllers\dckc;
 
 use App\Http\Controllers\Controller;
 use App\Models\dckc\Member;
+use App\Models\dckc\Order;
 use App\Models\dckc\OrderGoods;
 use Validator;
 use App\Models\BaseModel;
@@ -69,6 +70,22 @@ class OrderController extends Controller
         $this->datavalid['open_id'] = $this->validated['open_id'];
         $orderInfo = OrderGoods::checkout( $this->datavalid );
         return $this->json($orderInfo);
+
+    }
+    public function orderlist(){
+        $rules = [
+            'access_token'  => 'required|string|min:1',
+            'open_id'       => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $userinfo = Member::authDckc( $this->validated );
+
+        if( !$userinfo ){
+            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
+        }
+        $orderIinfo = Order::getListDckc( ['uid'=>$userinfo->id] );
 
     }
     /**
