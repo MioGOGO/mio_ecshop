@@ -65,7 +65,8 @@ class OrderController extends Controller
             return $error;
         }
         $this->datavalid['user_id'] = $userinfo->id;
-        $orderInfo = OrderGoods::checkout( $this->datavalid );
+        print_r( $this->validated );exit;
+        //$orderInfo = OrderGoods::checkout( $this->datavalid );
 
         Payment::payDckc( [ 'uid'=>$userinfo->id,'order'=>$orderInfo->order_id,'openid'=>$this->validated['open_id'] ] );
 
