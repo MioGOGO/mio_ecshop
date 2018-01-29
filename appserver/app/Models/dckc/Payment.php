@@ -199,7 +199,6 @@ class Payment extends BaseModel {
             if (!$config) {
                 return self::formatError(self::UNKNOWN_ERROR);
             }
-            print_r( $payment );exit;
 
             $wxpay = new WxPay();
             $wxpay->init($config['app_id'], $config['app_secret'], $config['mch_key']);
