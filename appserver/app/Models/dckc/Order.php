@@ -134,7 +134,7 @@ class Order extends BaseModel {
 
         $data = $model
             ->with('goods')
-            ->orderBy('add_time', 'DESC')->toArray();
+            ->orderBy('add_time', 'DESC')->paginate('999999')->toArray();
 
         print_r( $data );exit;
         return self::formatBody(['orders' => $data['data']]);
