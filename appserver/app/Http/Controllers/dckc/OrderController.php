@@ -67,7 +67,7 @@ class OrderController extends Controller
         $this->datavalid['user_id'] = $userinfo->id;
         $this->datavalid['open_id'] = $this->validated['open_id'];
         $orderInfo = OrderGoods::checkout( $this->datavalid );
-
+        print_r( $orderInfo );exit;
         return $this->json($orderInfo);
 
     }

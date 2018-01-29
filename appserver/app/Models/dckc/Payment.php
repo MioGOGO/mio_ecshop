@@ -249,7 +249,27 @@ class Payment extends BaseModel {
                 'trade_type' => 'JSAPI'
             ];
 
-            $inputParams['sign'] = $wxpay->createMd5Sign($inputParams);
+            //$inputParams['sign'] = $wxpay->createMd5Sign($inputParams);
+
+
+            ////测试专用
+
+            $body = [
+                'appid' => $config['app_id'],
+                'mch_id' => $config['mch_id'],
+                'prepay_id' => 'test',
+                'nonce_str' => $nonce_str,
+                'timestamp' => $time_stamp,
+                'packages' => 'prepay_id=test',
+                'sign' => 'ddddddddd',
+            ];
+            return self::formatBodyDckc(['order' => $order, 'wxpay' => $body]);
+
+
+
+            ////测试专用
+
+
 
             //获取prepayid
             $prepayid = $wxpay->sendPrepay($inputParams);
@@ -277,7 +297,7 @@ class Payment extends BaseModel {
                 'sign' => $sign,
             ];
 
-            return self::formatBody(['order' => $order, 'wxpay' => $body]);
+            return self::formatBodyDckc(['order' => $order, 'wxpay' => $body]);
         }
 
     }
