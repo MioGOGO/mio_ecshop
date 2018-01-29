@@ -262,7 +262,8 @@ class Payment extends BaseModel {
                 'timeStamp' => $time_stamp,
                 'package' => 'prepay_id=test',
                 'paySign' => 'ddddddddd',
-                'signType' => 'MD5'
+                'signType' => 'MD5',
+                'outTradeNo' => $order->order_sn,
             ];
             return self::formatBodyDckc(['data' => $body]);
 
