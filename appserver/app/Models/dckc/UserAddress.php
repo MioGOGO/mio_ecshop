@@ -72,16 +72,16 @@ class UserAddress extends BaseModel
         $model->user_id         = $user_id;
         $model->consignee       = 'dckc'.$user_id;
         $model->email           = '';
-        $model->country         = !empty( $arr['country'] ) ? $arr['country'] : '';
-        $model->province        = !empty( $arr['province'] ) ? $arr['province'] : '';
+        $model->country         = 1;
+        $model->province        = 2;
         $model->city            = !empty( $arr['city'] ) ? $arr['city'] : '';
         $model->district        = !empty( $arr['region'] ) ? $arr['region'] : '';
-        $model->address         = $address;
+        $model->address         = $address."[".(isset( $otherPoiInfo ) ? strip_tags( $otherPoiInfo ) : '')."]";
         $model->mobile          = isset($mobile) ? $mobile : '';
         $model->tel             = isset($tel) ? $tel : '';
         $model->zipcode         = isset($zip_code) ? $zip_code : '';
         $model->address_name    = '';
-        $model->sign_building   = '';
+        $model->sign_building   = isset( $poiName ) ? strip_tags( $poiName ) : '';
         $model->best_time       = $dishTime;
 
         if ($model->save()){

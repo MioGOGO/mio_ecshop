@@ -23,7 +23,7 @@ class GoodsController extends Controller
     {
 
         $rules = [
-            'when' => 'required|string|min:1',
+            'type' => 'required|string|min:1',
         ];
         if ($error = $this->validateInputDckc($rules)) {
             return $error;

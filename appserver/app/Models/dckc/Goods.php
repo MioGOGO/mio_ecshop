@@ -52,9 +52,9 @@ class Goods extends BaseModel
     public static function getHomeList( array $attributes )
     {
         extract( $attributes );
-        $infos = GoodsCategory::getCategorybykeyword( [ $when.'GoodsList' ] );
+        $infos = GoodsCategory::getCategorybykeyword( [ $type.'GoodsList' ] );
         return self::formatBodyDckc([
-            $when.'GoodsList' => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
+            $type.'GoodsList' => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
         ]);
     }
 
@@ -83,8 +83,18 @@ class Goods extends BaseModel
         $headerImg = GoodsGallery::getPhotoById($data->goods_id,'headerImg');
         $good_desc = ['desc'=>$data->goods_desc,'img'=>GoodsGallery::getPhotoById($data->goods_id,'detailImg') ];
         $data = $data->toArray();
+        extract( $infos );
         $data['headerImg'] = $headerImg;
-        $data['good_desc'] = $good_desc;
+        $data['detail'] = $good_desc;
+        $data['nutrient'] = [ 'entree' => isset($entree) ? $entree : array(),
+            'dish' => isset($dish) ? $dish : array(),
+            'staple' => isset($staple) ? $staple : array()
+        ];
+        $data['energy'] = [
+            'calorie' => isset($calorie) ? $calorie : '',
+            'protein' => isset($protein) ? $protein : '',
+            'sugar' => isset($sugar) ? $sugar : '',
+        ];
         // $current_price = UserRank::getMemberRankPriceByGid($product);
         //$data['promos'] = FavourableActivity::getPromoByGoods($id, $data->cat_id, $data->brand_id);
 
@@ -93,20 +103,7 @@ class Goods extends BaseModel
 //            $current_price = UserRank::getMemberRankPriceByGid($product);
 //            return self::formatBody(['product' => array_merge($data->toArray(), ['current_price' => $current_price])]);
 //        }
-        extract( $infos );
-        return self::formatBodyDckc([
-            'data' => $data,
-            'nutrient'=> [ 'entree' => isset($entree) ? $entree : array(),
-                'dish' => isset($dish) ? $dish : array(),
-                'staple' => isset($staple) ? $staple : array()
-            ],
-            'energy' => [
-                'calorie' => isset($calorie) ? $calorie : '',
-                'protein' => isset($protein) ? $protein : '',
-                'sugar' => isset($sugar) ? $sugar : '',
-            ]
-
-        ]);
+        return self::formatBodyDckc(['data' => $data]);
     }
 
         /**
