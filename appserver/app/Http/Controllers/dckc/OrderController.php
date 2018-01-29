@@ -45,7 +45,7 @@ class OrderController extends Controller
             'bookTime'  => 'required|string|min:1',
             'totalAmount'  => 'required|min:1',
             'message'      => 'required|string|min:1',
-            'paymentMethod'   => 'required|string|min:1',
+            'paymentMethod'   => 'required|min:1',
 
         ];
         if( !json_decode( $this->validated['params'],true ) ){
