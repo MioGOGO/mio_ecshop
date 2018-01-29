@@ -286,7 +286,7 @@ class Member extends BaseModel {
     {
         extract($attributes);
 
-        $uid = Token::authorization();
+        //$uid = Token::authorization();
 
         if ($model = Member::where('user_id', $uid)->first())
         {
@@ -294,8 +294,17 @@ class Member extends BaseModel {
                 $model->sex = $gender;
             }
 
-            if (isset($nickname)) {
-                $model->alias = strip_tags($nickname);
+            if (isset($name)) {
+                $model->alias = strip_tags($name);
+            }
+
+            if( isset( $phone ) ){
+                $model->mobile_phone = intval( $phone );
+            }
+
+            if( isset( $address ) ){
+
+                $model->passwd_question = strip_tags( $address.'--'.$subAdd );
             }
 
             if(isset($avatar_url)){
@@ -323,16 +332,16 @@ class Member extends BaseModel {
 
             if ($model->save())
             {
-                return self::formatBody(['user' => $model->toArray()]);
+                return self::formatBodyDckc(['user' => $model->toArray()]);
 
             }   else {
 
-                return self::formatError(self::UNKNOWN_ERROR);
+                return self::formatBodyDckc(self::UNKNOWN_ERROR);
             }
 
         } else {
 
-            return self::formatError(self::NOT_FOUND);
+            return self::formatBodyDckc(self::NOT_FOUND);
 
         }
     }

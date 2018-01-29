@@ -185,11 +185,10 @@ class UserController extends Controller
         }
         unset( $this->validated['param'] );
 
-        $aa = array_merge( $this->validated,$this->datavalid );
-        print_r( $aa );exit;
+        $toduArr = array_merge( $this->validated,$this->datavalid,['uid'=>$userinfo->id] );
 
 
-        $data = Member::updateMember( array_merge( $this->validated,$this->datavalid ) );
+        $data = Member::updateMember( $toduArr );
         return $this->json($data);
     }
 
