@@ -78,36 +78,4 @@ class OrderController extends Controller
         Payment::notify($code);
     }
 
-
-    /**
-     * 验证json数据
-     * @param  array $rules
-     * @return response
-     */
-    public function vaidJsonOrderParsmrs( array $decodeJson,$rules,$flag = false)
-    {
-        if( $flag ){
-            $validator = Validator::make($decodeJson, $rules);
-            if ($validator->fails()) {
-                return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
-            } else {
-                $this->datavalid = array_intersect_key($decodeJson, $rules);
-                $this->datavalid = $decodeJson ;
-                return false;
-            }
-        }else{
-            if( count( $decodeJson )  !== count( $decodeJson,1 ) ){
-                foreach ( $decodeJson as $val ){
-                    $validator = Validator::make($val, $rules);
-                    if( $validator->fails() ){
-                        return self::jsondckc(BaseModel::formatErrorDckc(BaseModel::BAD_REQUEST, $validator->messages()->first()));
-                    }
-                }
-            }
-
-        }
-    }
-
-
-
 }

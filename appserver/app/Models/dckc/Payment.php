@@ -880,7 +880,6 @@ class Payment extends BaseModel {
         }
 
         if ($code == 'wxpay.web'|| $code == 'wxpay.wxa') {
-            echo $code;exit;
             if (version_compare(PHP_VERSION, '5.6.0', '<')) {
                 if (!empty($GLOBALS['HTTP_RAW_POST_DATA'])) {
                     $postStr = $GLOBALS['HTTP_RAW_POST_DATA'];
