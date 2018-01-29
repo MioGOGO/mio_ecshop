@@ -40,11 +40,12 @@ class OrderController extends Controller
             return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
         }
         $rulesJson = [
-            'address'   => 'required|string|min:1',
-            'dishTime'  => 'required|string|min:1',
-            'totalFee'  => 'required|min:1',
-            'note'      => 'required|string|min:1',
-            'payType'   => 'required|string|min:1',
+            //'address'   => 'required|string|min:1',
+            'bookDate'  => 'required|string|min:1',
+            'bookTime'  => 'required|string|min:1',
+            'totalAmount'  => 'required|min:1',
+            'message'      => 'required|string|min:1',
+            'paymentMethod'   => 'required|string|min:1',
 
         ];
         if( !json_decode( $this->validated['params'],true ) ){
@@ -58,8 +59,8 @@ class OrderController extends Controller
         }
         $goodlistvalid = [
             'id'    => 'required|min:1',
+            'count'    => 'required|min:1',
             'amount'    => 'required|min:1',
-            'fee'    => 'required|min:1',
         ];
         if( $error = $this->vaidJsonOrderParsmrs( $this->datavalid['goodsList'],$goodlistvalid ) ){
             return $error;

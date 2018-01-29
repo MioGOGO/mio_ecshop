@@ -141,7 +141,7 @@ class OrderGoods extends BaseModel {
     {
 
         extract($attributes);
-        $consignee = UserAddress::addDckc( $attributes );
+        //$consignee = UserAddress::addDckc( $attributes );
         //-- 完成所有订单操作，提交到数据库
         /* 取得购物类型 */
 
@@ -170,11 +170,11 @@ class OrderGoods extends BaseModel {
 //        }
 
 
-        $consignee_info = UserAddress::get_consignee($consignee);
+        //$consignee_info = UserAddress::get_consignee($consignee);
 
-        if (!$consignee_info) {
-            return self::formatError(self::BAD_REQUEST,trans('message.consignee.not_found'));
-        }
+//        if (!$consignee_info) {
+//            return self::formatError(self::BAD_REQUEST,trans('message.consignee.not_found'));
+//        }
 
         $inv_type = isset($invoice_type) ? $invoice_type : ShopConfig::findByCode('invoice_type') ;
         $inv_payee = isset($invoice_title) ? $invoice_title : ShopConfig::findByCode('invoice_title');//发票抬头
@@ -183,6 +183,7 @@ class OrderGoods extends BaseModel {
 
         $order = array(
             'shipping_id'     => intval(0),
+            //$paymentMethod
             'pay_id'          => intval(0),
             'pack_id'         => isset($_POST['pack']) ? intval($_POST['pack']) : 0,//包装id
             'card_id'         => isset($_POST['card']) ? intval($_POST['card']) : 0,//贺卡id
@@ -203,7 +204,9 @@ class OrderGoods extends BaseModel {
             'order_status'    => Order::OS_UNCONFIRMED,
             'shipping_status' => Order::SS_UNSHIPPED,
             'pay_status'      => Order::PS_UNPAYED,
-            'agency_id'       => 0 ,//办事处的id
+            'agency_id'       => 0 ,//办事处的ida
+            'pay_note'        => isset( $message ) ? strip_tags( $message )  : '' ,
+            'best_time'       => $bookDate.'|'.$bookTime,
         );
 
 
@@ -217,20 +220,20 @@ class OrderGoods extends BaseModel {
 
 
         /* 收货人信息 */
-        $order['consignee'] = $consignee_info->consignee;
-        $order['country'] = $consignee_info->country;
-        $order['province'] = $consignee_info->province;
-        $order['city'] = $consignee_info->city;
-        $order['mobile'] = $consignee_info->mobile;
-        $order['tel'] = $consignee_info->tel;
-        $order['zipcode'] = $consignee_info->zipcode;
-        $order['district'] = $consignee_info->district;
-        $order['address'] = $consignee_info->address;
+        $order['consignee'] =
+        $order['country'] = '1';
+        $order['province'] = '2';
+        $order['city'] = '37';
+        $order['mobile'] = isset($mobile) ? intval( $mobile ) : '';
+        $order['tel'] = isset($tel) ? intval( $tel ) : '';
+        //$order['zipcode'] = $consignee_info->zipcode;
+        //$order['district'] = $consignee_info->district;
+        $order['address'] = isset($address) ? intval( $address ) : '';
 
         /* 订单中的总额 */
 
 
-        $order['goods_amount'] = $totalFee;
+        $order['goods_amount'] = $totalAmount;
         $order['discount']     = 0;
         $order['surplus']      = 0;
         $order['tax']          = 0;
@@ -252,7 +255,7 @@ class OrderGoods extends BaseModel {
 
 
         /* 如果全部使用余额支付，检查余额是否足够 没有余额支付*/
-        $order['order_amount']  = number_format($totalFee, 2, '.', '');
+        $order['order_amount']  = number_format($totalAmount, 2, '.', '');
 
         /* 如果订单金额为0（使用余额或积分或红包支付），修改订单状态为已确认、已付款 */
         if ($order['order_amount'] <= 0)
@@ -295,13 +298,17 @@ class OrderGoods extends BaseModel {
             if( !$goodInfo ){
                 return self::formatError(self::BAD_REQUEST,'goods  not exists');
             }
+
+            if( $goods['amount'] != ($goods['count']*$goodInfo->shop_price) ){
+                return self::formatError(self::BAD_REQUEST,'goods price error');
+            }
             $order_good                 = new OrderGoods;
             $order_good->order_id       = $new_order_id;
             $order_good->goods_id       = $goodInfo->goods_id;
             $order_good->goods_name     = $goodInfo->goods_name;
             $order_good->goods_sn       = $goodInfo->goods_sn;
             $order_good->product_id     = 0;
-            $order_good->goods_number   = $goods['amount'];
+            $order_good->goods_number   = $goods['count'];
             $order_good->market_price   = $goodInfo->market_price;
             $order_good->goods_price    = $goodInfo->shop_price;
             //$order_good->goods_attr     = $goods->goods_attr;
@@ -311,9 +318,9 @@ class OrderGoods extends BaseModel {
             //$order_good->is_gift        = $goods->is_gift;
             //$order_good->goods_attr_id  = $goods->goods_attr_id;
             $order_good->save();
-            $checkTotalPrice += $goods['amount']*$goodInfo->shop_price;
+            $checkTotalPrice += $goods['count']*$goodInfo->shop_price;
         }
-        if( $checkTotalPrice != $totalFee ){
+        if( $checkTotalPrice != $totalAmount ){
             Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
             return self::formatError(10035,'list price ！= totalfee  ');
         };
