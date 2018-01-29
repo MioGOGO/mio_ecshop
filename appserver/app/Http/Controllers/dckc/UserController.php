@@ -16,7 +16,7 @@ use Log;
 
 class UserController extends Controller
 {
-    private $datavalid;
+    public $datavalid;
     /**
      * POST /user/signin
      */

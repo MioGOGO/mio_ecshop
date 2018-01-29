@@ -21,7 +21,7 @@ use App\Models\dckc\Payment;
 class OrderController extends Controller
 {
 
-    private $datavalid;
+    public $datavalid;
 
     public function add(){
         $rules = [
