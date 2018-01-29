@@ -97,12 +97,11 @@ class Payment extends BaseModel {
     public static function payDckc(array $attributes)
     {
         extract($attributes);
-        $uid = Token::authorization();
         $code = 'wxpay.web';
 
         $order = Order::where(['user_id' => $uid, 'order_id' => $order, 'pay_status' => Order::PS_UNPAYED])->with('goods')->first();
         if (!$order) {
-            return self::formatError(self::NOT_FOUND);
+            return self::formatErrorDckc(self::NOT_FOUND);
         }
 
         $shop_name = ShopConfig::findByCode('shop_name');
@@ -200,6 +199,7 @@ class Payment extends BaseModel {
             if (!$config) {
                 return self::formatError(self::UNKNOWN_ERROR);
             }
+            print_r( $payment );exit;
 
             $wxpay = new WxPay();
             $wxpay->init($config['app_id'], $config['app_secret'], $config['mch_key']);
