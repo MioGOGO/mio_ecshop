@@ -296,10 +296,12 @@ class OrderGoods extends BaseModel {
         foreach ($goodsList as $key => $goods) {
             $goodInfo = Goods::where(['is_delete' => 0, 'goods_id' => $goods['id']])->first();
             if( !$goodInfo ){
+                Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
                 return self::formatError(self::BAD_REQUEST,'goods  not exists');
             }
 
             if( $goods['amount'] != ($goods['count']*$goodInfo->shop_price) ){
+                Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
                 return self::formatError(self::BAD_REQUEST,'goods price error');
             }
             $order_good                 = new OrderGoods;
