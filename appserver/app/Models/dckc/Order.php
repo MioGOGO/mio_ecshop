@@ -168,6 +168,55 @@ class Order extends BaseModel {
         }
         return self::formatBodyDckc(['data' => $result]);
     }
+    public static function getDetailDckc(array $attributes)
+    {
+        extract($attributes);
+        //$uid = Token::authorization();
+
+        $model = self::where(['user_id' => $uid,'order_sn' => $id]);
+        $model->whereIn('pay_status', [self::PS_UNPAYED, self::PS_PAYING, self::PS_PAYED]);
+        $model->whereNotIn('order_status', [self::OS_INVALID, self::OS_RETURNED, self::OS_SPLITED, self::OS_SPLITING_PART]);
+
+
+        $data = $model
+            ->with('goods')
+            ->orderBy('add_time', 'DESC')->get()->toArray();
+
+        $result = array();
+        print_r( $data );exit;
+        if (!empty($data)) {
+            foreach ($data as $k => $v) {
+                $_tmp = array();
+                $counter = 0;
+                $_info = array();
+                if (!empty($v['goods']) && is_array($v['goods'])) {
+                    foreach ($v['goods'] as $kk => $vv) {
+                        $_tmp_info['id'] = $vv['product']['id'];
+                        $_tmp_info['name'] = $vv['product']['name'];
+                        $_tmp_info['price'] = $vv['product']['price'];
+                        $_tmp_info['count'] = $vv['total_amount'];
+                        $_tmp_info['amount'] = $vv['total_price'];
+                        $_info[] = $_tmp_info;
+                        $counter += $vv['total_amount'];
+                    }
+                }
+                $best = explode("|", $v['besttime']);
+                $_tmp['bookDate'] = (count($best) > 1) ? $best['0'] : '';
+                $_tmp['bookTime'] = (count($best) > 1) ? $best['1'] : '';
+                $_tmp['createTime'] = $v['created_at'];
+                $_tmp['id'] = $v['sn'];
+                $_tmp['message'] = $v['paynote'];
+                $_tmp['paymentMethod'] = $v['payid'];
+                $_tmp['paymentState'] = $v['status'];
+                $_tmp['totalAmount'] = $v['total'];
+                $_tmp['totalCount'] = $counter;
+                $_tmp['goodsList'] = $_info;
+                $result[] = $_tmp;
+            }
+        }
+        return self::formatBodyDckc(['data' => $result]);
+
+    }
     public static function getInfo(array $attributes)
     {
         extract($attributes);
