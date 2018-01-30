@@ -103,7 +103,7 @@ class OrderController extends Controller
             return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
         }
 
-        $orderInfo = Order::getDetailDckc( [ 'uid'=>$userinfo->id,$this->validated['id'] ] );
+        $orderInfo = Order::getDetailDckc( [ 'uid'=>$userinfo->id,'id'=>$this->validated['id'] ] );
 
 
 
