@@ -20,11 +20,11 @@ class WxConfigController extends Controller
     public function get(){
 
 
-        $payment = Payment::where(['type' => 'payment', 'status' => 1, 'code' => 'wechat.web'])->first();
+        $payment = Payment::where(['type' => 'oauth', 'status' => 1, 'code' => 'wechat.web'])->first();
         if (!$payment) {
             return BaseModel::formatErrorDckc('10040');
         }
-        $config = Payment::checkConfig(['app_id', 'app_secret', 'mch_id', 'mch_key'], $payment);
+        $config = Payment::checkConfig(['app_id', 'app_secret'], $payment);
         if (!$config) {
             return BaseModel::formatErrorDckc('10041');
         }

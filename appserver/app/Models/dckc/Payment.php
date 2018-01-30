@@ -1000,7 +1000,7 @@ class Payment extends BaseModel {
 
     }
 
-    private static function checkConfig(array $params, $payment)
+    public static function checkConfig(array $params, $payment)
     {
         $config = json_decode($payment->config, true);
 
