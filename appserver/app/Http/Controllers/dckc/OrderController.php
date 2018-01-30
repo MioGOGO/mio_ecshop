@@ -69,7 +69,7 @@ class OrderController extends Controller
         $this->datavalid['user_id'] = $userinfo->id;
         $this->datavalid['open_id'] = $this->validated['open_id'];
         $orderInfo = OrderGoods::checkout( $this->datavalid );
-        return $this->json($orderInfo);
+        return $this->jsondckc($orderInfo);
 
     }
     public function orderlist(){
@@ -86,6 +86,7 @@ class OrderController extends Controller
             return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
         }
         $orderIinfo = Order::getListDckc( ['uid'=>$userinfo->id] );
+        return $this->jsondckc( $orderIinfo );
 
     }
     /**
