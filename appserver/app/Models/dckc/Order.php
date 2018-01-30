@@ -15,8 +15,8 @@ class Order extends BaseModel {
     public    $timestamps = false;
 
     protected $guarded = [];
-    protected $appends = ['id', 'sn', 'total', 'payment', 'shipping', 'invoice', 'coupon', 'score','use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','promos','best_time','pay_note','pay_id'];
-    protected $visible = ['id', 'sn', 'total', 'goods', 'payment', 'shipping', 'invoice', 'coupon', 'score', 'use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','discount_price','promos','best_time','pay_note','pay_id'];
+    protected $appends = ['id', 'sn', 'total', 'payment', 'shipping', 'invoice', 'coupon', 'score','use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','promos','besttime','paynote','payid'];
+    protected $visible = ['id', 'sn', 'total', 'goods', 'payment', 'shipping', 'invoice', 'coupon', 'score', 'use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','discount_price','promos','besttime','paynote','payid'];
 
     // ECM 订单状态
     const STATUS_CREATED     = 0; // 待付款
@@ -153,12 +153,12 @@ class Order extends BaseModel {
                         $counter += $vv['total_amount'];
                     }
                 }
-                $best = explode( "|",$v['best_time'] );
+                $best = explode( "|",$v['besttime'] );
                 $_tmp['bookDate'] = (count($best)>1) ? $best['0'] : '';
                 $_tmp['bookTime'] = (count($best)>1) ? $best['1'] : '';
                 $_tmp['id'] = $v['sn'];
-                $_tmp['message'] = $v['pay_note'];
-                $_tmp['paymentMethod'] = $v['pay_id'];
+                $_tmp['message'] = $v['paynote'];
+                $_tmp['paymentMethod'] = $v['payid'];
                 $_tmp['paymentState'] = $v['status'];
                 $_tmp['totalAmount'] = $v['total'];
                 $_tmp['totalCount'] = $counter;
@@ -644,14 +644,14 @@ class Order extends BaseModel {
         }
         return null;
     }
-    public function getBest_timeAttribute(){
+    public function getBesttimeAttribute(){
         return $this->attributes['best_time'];
     }
 
-    public function getPay_noteAttribute(){
+    public function getPaynoteAttribute(){
         return $this->attributes['pay_note'];
     }
-    public function getPay_idAttribute(){
+    public function getPayidAttribute(){
         return $this->attributes['pay_id'];
     }
     public function getPromosAttribute()
