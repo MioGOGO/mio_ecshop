@@ -137,7 +137,7 @@ class Order extends BaseModel {
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
         $result = array();
-        if( empty( $data ) ){
+        if( !empty( $data ) ){
             foreach ( $data as $k => $v ){
                 $_tmp = array();
                 $counter = 0;
