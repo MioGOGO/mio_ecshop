@@ -15,8 +15,8 @@ class Order extends BaseModel {
     public    $timestamps = false;
 
     protected $guarded = [];
-    protected $appends = ['id', 'sn', 'total', 'payment', 'shipping', 'invoice', 'coupon', 'score','use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','promos'];
-    protected $visible = ['id', 'sn', 'total', 'goods', 'payment', 'shipping', 'invoice', 'coupon', 'score', 'use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','discount_price','promos'];
+    protected $appends = ['id', 'sn', 'total', 'payment', 'shipping', 'invoice', 'coupon', 'score','use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','promos','best_time','pay_note','pay_id'];
+    protected $visible = ['id', 'sn', 'total', 'goods', 'payment', 'shipping', 'invoice', 'coupon', 'score', 'use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','discount_price','promos','best_time','pay_note','pay_id'];
 
     // ECM 订单状态
     const STATUS_CREATED     = 0; // 待付款
@@ -134,9 +134,39 @@ class Order extends BaseModel {
 
         $data = $model
             ->with('goods')
-            ->orderBy('add_time', 'DESC')->paginate('999999')->toArray();
+            ->orderBy('add_time', 'DESC')->get()->toArray();
 
-        print_r( $data );exit;
+        $result = array();
+        if( empty( $data ) ){
+            foreach ( $data as $k => $v ){
+                $_tmp = array();
+                $counter = 0;
+                $_info = array();
+                if( !empty( $v['goods'] ) && is_array( $v['goods'] ) ){
+                    foreach ( $v['goods'] as $kk => $vv ){
+                        $_tmp_info['id'] = $vv['product']['id'];
+                        $_tmp_info['name'] = $vv['product']['name'];
+                        $_tmp_info['price'] = $vv['product']['price'];
+                        $_tmp_info['count'] = $vv['total_amount'];
+                        $_tmp_info['amount'] = $vv['total_price'];
+                        $_info[] = $_tmp_info;
+                        $counter += $vv['total_amount'];
+                    }
+                }
+                $best = explode( "|",$v['best_time'] );
+                $_tmp['bookDate'] = (count($best)>1) ? $best['0'] : '';
+                $_tmp['bookTime'] = (count($best)>1) ? $best['1'] : '';
+                $_tmp['id'] = $v['sn'];
+                $_tmp['message'] = $v['pay_note'];
+                $_tmp['paymentMethod'] = $v['pay_id'];
+                $_tmp['paymentState'] = $v['status'];
+                $_tmp['totalAmount'] = $v['total'];
+                $_tmp['totalCount'] = $counter;
+                $_tmp['goodsList'] = $_info;
+                $result[] = $_tmp;
+            }
+        }
+        print_r( $result );exit;
         return self::formatBody(['orders' => $data['data']]);
     }
     public static function getInfo(array $attributes)
@@ -614,8 +644,16 @@ class Order extends BaseModel {
         }
         return null;
     }
+    public function getBest_timeAttribute(){
+        return $this->attributes['best_time'];
+    }
 
-
+    public function getPay_noteAttribute(){
+        return $this->attributes['pay_note'];
+    }
+    public function getPay_idAttribute(){
+        return $this->attributes['pay_id'];
+    }
     public function getPromosAttribute()
     {
         $scale = ShopConfig::findByCode('integral_scale');
