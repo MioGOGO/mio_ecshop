@@ -24,7 +24,7 @@ class WxConfigController extends Controller
         if (!$payment) {
             return BaseModel::formatErrorDckc('10040');
         }
-        $config = self::checkConfig(['app_id', 'app_secret', 'mch_id', 'mch_key'], $payment);
+        $config = Payment::checkConfig(['app_id', 'app_secret', 'mch_id', 'mch_key'], $payment);
         if (!$config) {
             return BaseModel::formatErrorDckc('10041');
         }
