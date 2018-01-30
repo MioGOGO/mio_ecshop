@@ -31,7 +31,7 @@ class WxConfigController extends Controller
 
         $jssdk = new JSSDK($config['app_id'], $config['app_secret']);
         $arr = $jssdk->GetSignPackage();
-        print_r( $arr );exit;
+        return $this->jsondckc( $arr );
     }
 
 }
