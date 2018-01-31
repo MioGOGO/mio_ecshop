@@ -34,7 +34,7 @@ return [
     /**
      * 设置浏览器允许访问的服务器的头信息的白名单:
      */
-    'exposeHeaders' => ['X-ECAPI-ErrorCode', 'X-ECAPI-ErrorDesc'],
+    'exposeHeaders' => ['X-DCKCAPI-ErrorCode', 'X-DCKCAPI-ErrorDesc'],
 
     /**
      * 本次“预请求 OPTIONS ”的响应结果有效时间（单位：秒）， 默认1天
