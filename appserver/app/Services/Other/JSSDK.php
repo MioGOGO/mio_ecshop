@@ -65,7 +65,8 @@ class JSSDK {
       // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
       $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
       $res = json_decode($this->httpGet($url), true);
-      Log::debug('sort_goods_attr_id_array', $res);
+      Log::debug('MIO', ['token' => $url]);
+      Log::debug('MIO', ['token' => $res]);
       if ($res['errmsg'] != 'ok') {
         $data->expire_time = time() + 7000;
         $ticket = $data->jsapi_ticket;
