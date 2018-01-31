@@ -52,27 +52,25 @@ class JSSDK {
   }
 
   private function getJsApiTicket() {
-
     if (!$data = Cache::get("jsapi_ticket")) {
       $data = '{"jsapi_ticket":"","expire_time":0}';
     }
 
     $data = json_decode($data);
-
+    $ticket = false;
     if ($data->expire_time < time()) {
       $accessToken = $this->getAccessToken();
       // 如果是企业号用以下 URL 获取 ticket
       // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
       $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
       $res = json_decode($this->httpGet($url), true);
-      Log::debug('MIO', ['token' => $url]);
-      Log::debug('MIO', ['token' => $res]);
       if ($res['errmsg'] != 'ok') {
-        $data->expire_time = time() + 7000;
-        $ticket = $data->jsapi_ticket;
-        Cache::put("jsapi_ticket", json_encode($data), 0);
+          Log::debug('MIO', ['api'=>'error']);
       } else {
-        $ticket = $res['ticket'];
+          $data->expire_time = time() + 7000;
+          $ticket = $res['ticket'];
+          $data->jsapi_ticket = $ticket;
+          Cache::put("jsapi_ticket", json_encode($data), 0);
       }
     } else {
       $ticket = $data->jsapi_ticket;
