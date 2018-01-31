@@ -26,11 +26,11 @@ class Goods extends BaseModel
     protected $guarded = [];
 
     protected $appends = [
-        'id','coverImg', 'price','name'
+        'id','coverImg', 'price','name','detailImg'
     ];
 
     protected $visible = [
-        'id','coverImg', 'price','name'
+        'id','coverImg', 'price','name','detailImg'
     ];
 
     // protected $with = [];
@@ -54,7 +54,7 @@ class Goods extends BaseModel
         extract( $attributes );
         $infos = GoodsCategory::getCategorybykeyword( [ $type.'GoodsList' ] );
         return self::formatBodyDckc([
-            $type.'GoodsList' => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
+            'data' => count(self::getRecommendGoods( $infos )) == 0 ? null : self::getRecommendGoods( $infos ),
         ]);
     }
 
