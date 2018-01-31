@@ -218,7 +218,7 @@ class UserController extends Controller
         $result['address'] = $consignee_info->address;
         $result['otherPoiInfo'] = $consignee_info->sign_building;
         $result['poiName'] = $consignee_info->address_name;
-        return $this->jsondckc( $result );
+        return $this->jsondckc( ['data'=>$result] );
     }
 
     /**
