@@ -138,6 +138,8 @@ class Order extends BaseModel {
 
         $result = array();
         if( !empty( $data ) ){
+            $consignee_info = UserAddress::get_consignee_dckc($uid);
+            print_r( $consignee_info );exit;
             foreach ( $data as $k => $v ){
                 $_tmp = array();
                 $counter = 0;
@@ -183,7 +185,6 @@ class Order extends BaseModel {
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
         $result = array();
-        print_r( $data );exit;
         if (!empty($data)) {
             foreach ($data as $k => $v) {
                 $_tmp = array();
@@ -203,7 +204,7 @@ class Order extends BaseModel {
                 $best = explode("|", $v['besttime']);
                 $_tmp['bookDate'] = (count($best) > 1) ? $best['0'] : '';
                 $_tmp['bookTime'] = (count($best) > 1) ? $best['1'] : '';
-                $_tmp['createTime'] = $v['created_at'];
+                $_tmp['createTime'] = date('Y-m-d H:i:s',$v['created_at'] );
                 $_tmp['id'] = $v['sn'];
                 $_tmp['message'] = $v['paynote'];
                 $_tmp['paymentMethod'] = $v['payid'];
