@@ -38,6 +38,7 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
     $app->get('goods/list','GoodsController@getlist');
     $app->get('goods/detail','GoodsController@goodsdetail');
     $app->get('wxconfig/get','WxConfigController@get');
+    $app->get('delivery/checkRange','DeliveryController@checkRange');
 
 });
 //wx openid
