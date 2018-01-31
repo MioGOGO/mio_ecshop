@@ -17,7 +17,7 @@ class ProgramLong{
 
     public static function test(){
 
-        echo self::Distance( 39.94607, 116.32793, 31.24063, 121.42575 );
+        echo self::Distance( 39.91409, 116.408023, 39.913371, 116.330409 );
 
     }
 
