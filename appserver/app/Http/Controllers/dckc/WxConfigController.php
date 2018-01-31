@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BaseModel;
 use App\Models\dckc\Payment;
 use App\Services\Other\JSSDK;
+use Cache;
 
 class WxConfigController extends Controller
 {
@@ -32,6 +33,10 @@ class WxConfigController extends Controller
         $jssdk = new JSSDK($config['app_id'], $config['app_secret']);
         $arr = $jssdk->GetSignPackage();
         return $this->jsondckc( $arr );
+    }
+    public function test(){
+        $aa = Cache::get("access_token");
+        print_r( $aa );exit;
     }
 
 }
