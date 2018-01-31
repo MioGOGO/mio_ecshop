@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use App\Helper\Token;
 use App\Models\dckc\Member;
 use App\Models\dckc\UserAddress;
+use App\Models\BaseModel;
 use App\Models\dckc\RegFields;
 use App\Models\v2\Configs;
 use App\Models\dckc\Features;
-use APp\Models\BaseModel;
 use Log;
 
 class UserController extends Controller
@@ -218,7 +218,7 @@ class UserController extends Controller
         $result['address'] = $consignee_info->address;
         $result['otherPoiInfo'] = $consignee_info->sign_building;
         $result['poiName'] = $consignee_info->address_name;
-        return $this->jsondckc( ['data'=>$result] );
+        return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$result]) );
     }
 
     /**
