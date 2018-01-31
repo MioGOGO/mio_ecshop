@@ -105,7 +105,7 @@ class OrderController extends Controller
 
         $orderInfo = Order::getDetailDckc( [ 'uid'=>$userinfo->id,'id'=>$this->validated['id'] ] );
 
-
+        return $this->jsondckc( $orderInfo );
 
 
     }

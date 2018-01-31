@@ -185,7 +185,6 @@ class Order extends BaseModel {
         $result = array();
         if (!empty($data)) {
             $consignee_info = UserAddress::get_consignee_dckc($uid);
-            print_r( $consignee_info );exit;
             foreach ($data as $k => $v) {
                 $_tmp = array();
                 $counter = 0;
@@ -212,6 +211,14 @@ class Order extends BaseModel {
                 $_tmp['totalAmount'] = $v['total'];
                 $_tmp['totalCount'] = $counter;
                 $_tmp['goodsList'] = $_info;
+                $_user = array();
+                $_user['id'] = $uid;
+                $_user['name'] = $consignee_info->consignee;
+                $_user['phone'] = $consignee_info->mobile;
+                $_user['address'] = $consignee_info->address;
+                $_user['otherPoiInfo'] = $consignee_info->sign_building;
+                $_user['poiName'] = $consignee_info->address_name;
+                $_tmp['user'] = $_user;
                 $result[] = $_tmp;
             }
         }
