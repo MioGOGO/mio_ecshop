@@ -23,6 +23,7 @@ class JSSDK {
     } else {
           $url = '';
     }
+    $url = 'http://h5.uhdog.com/?';
     $timestamp = time();
     $nonceStr = $this->createNonceStr();
 
