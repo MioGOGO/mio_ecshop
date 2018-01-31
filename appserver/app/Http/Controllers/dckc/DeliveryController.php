@@ -10,14 +10,23 @@ namespace App\Http\Controllers\dckc;
 
 
 use App\Helper\ProgramLong;
+use App\Http\Controllers\Controller;
+use App\Models\dckc\ShopConfig;
 
-class DeliveryController
+class DeliveryController extends Controller
 {
 
 
     public function checkRange(){
+        $rules = [
+            'params'        => 'required|json',
+        ];
 
-        ProgramLong::test();
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $result = ShopConfig::checkRange( $this->validated );
+        return $this->jsondckc( $result );
 
     }
 

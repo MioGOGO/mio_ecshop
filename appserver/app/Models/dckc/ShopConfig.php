@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\dckc;
+use App\Helper\ProgramLong;
 use App\Models\BaseModel;
 
 use App\Helper\Header;
@@ -40,5 +41,28 @@ class ShopConfig extends BaseModel {
         }
 
         return $data;
+    }
+    public static function checkRange( array  $attributes ){
+        extract($attributes);
+        if( json_decode( $params,true ) ){
+            $paramsArray = json_decode( $params,true );
+        }else{
+            return self::formatErrorDckc(40001,'json format error');
+        }
+        if( !isset( $paramsArray['lng'] ) && !isset( $paramsArray['lat'] ) ){
+            return self::formatErrorDckc(40002,'lng or lat is null');
+        }
+        $res = ['data'=>['inRange'=>0]];
+        $sconf = self::findByCode( 'close_comment' );
+        $sconfArray = json_decode( $sconf,true );
+        if( !empty( $sconfArray ) ){
+            foreach ( $sconfArray as $k => $v ){
+                $h = ProgramLong::Distance( $v['lat'],$v['lng'],$paramsArray['lat'],$paramsArray['lng'] );
+                if( $h <= 5 ){
+                    $res = ['data'=>['inRange'=>1]];
+                }
+            }
+        }
+        return self::formatBodyDckc( $res );
     }
 }
