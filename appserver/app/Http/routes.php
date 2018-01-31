@@ -48,6 +48,7 @@ $app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'mi
     $app->get('order/list', 'OrderController@orderlist');
     $app->get('order/detail', 'OrderController@orderdetail');
     $app->get('userinfo/update','UserController@updateProfileDckc');
+    $app->get('userinfo/get','UserController@ProfileDckc');
 });
 
 //Guest

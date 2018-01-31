@@ -190,7 +190,34 @@ class UserController extends Controller
 
 
         $data = Member::updateMember( $toduArr );
-        return $this->json($data);
+        return $this->jsondckc($data);
+    }
+    public function ProfileDckc(){
+        $rules = [
+            'access_token'  => 'required|string|min:1',
+            'open_id'       => 'required|string|min:1',
+        ];
+
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+
+        $userinfo = Member::authDckc( $this->validated );
+        if( !$userinfo ){
+            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
+        }
+        $consignee_info = UserAddress::get_consignee_dckc( $userinfo->id );
+        $result = array();
+        if( !$consignee_info ){
+            return self::jsondckc(BaseModel::formatErrorDckc(10038, 'user not found'));
+        }
+        $result['id'] = $userinfo->id;
+        $result['name'] = $consignee_info->consignee;
+        $result['phone'] = $consignee_info->mobile;
+        $result['address'] = $consignee_info->address;
+        $result['otherPoiInfo'] = $consignee_info->sign_building;
+        $result['poiName'] = $consignee_info->address_name;
+        return $this->jsondckc( $result );
     }
 
     /**
