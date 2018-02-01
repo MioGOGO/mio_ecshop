@@ -32,6 +32,7 @@ class WxConfigController extends Controller
 
         $jssdk = new JSSDK($config['app_id'], $config['app_secret']);
         $arr = $jssdk->GetSignPackage();
+        $arr = BaseModel::formatBodyDckc([ 'data'=>$arr ]);
         return $this->jsondckc( $arr );
     }
     public function test(){
