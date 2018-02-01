@@ -19,8 +19,8 @@ class DeliveryController extends Controller
 
     public function checkRange(){
         $rules = [
-            'lng'  => 'required|float|min:1',
-            'lat'  => 'required|float|min:1',
+            'lng'  => 'required|string|min:1',
+            'lat'  => 'required|string|min:1',
             'poiName'  => 'required|string|min:1',
             'city'  => 'required|string|min:1',
         ];
