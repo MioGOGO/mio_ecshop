@@ -44,12 +44,12 @@ class ShopConfig extends BaseModel {
     }
     public static function checkRange( array  $attributes ){
         extract($attributes);
-        if( json_decode( $params,true ) ){
-            $paramsArray = json_decode( $params,true );
-        }else{
-            return self::formatErrorDckc(40001,'json format error');
-        }
-        if( !isset( $paramsArray['lng'] ) && !isset( $paramsArray['lat'] ) ){
+//        if( json_decode( $params,true ) ){
+//            $paramsArray = json_decode( $params,true );
+//        }else{
+//            return self::formatErrorDckc(40001,'json format error');
+//        }
+        if( !isset( $lng ) && !isset( $lat ) ){
             return self::formatErrorDckc(40002,'lng or lat is null');
         }
         $res = ['data'=>['inRange'=>0]];
@@ -57,7 +57,7 @@ class ShopConfig extends BaseModel {
         $sconfArray = json_decode( $sconf,true );
         if( !empty( $sconfArray ) ){
             foreach ( $sconfArray as $k => $v ){
-                $h = ProgramLong::Distance( $v['lat'],$v['lng'],$paramsArray['lat'],$paramsArray['lng'] );
+                $h = ProgramLong::Distance( $v['lat'],$v['lng'],$lat,$lng );
                 if( $h <= 5 ){
                     $res = ['data'=>['inRange'=>1]];
                 }

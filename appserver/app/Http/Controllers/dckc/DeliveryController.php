@@ -19,7 +19,10 @@ class DeliveryController extends Controller
 
     public function checkRange(){
         $rules = [
-            'params'        => 'required|json',
+            'lng'  => 'required|float|min:1',
+            'lat'  => 'required|float|min:1',
+            'poiName'  => 'required|string|min:1',
+            'city'  => 'required|string|min:1',
         ];
 
         if ($error = $this->validateInputDckc($rules)) {
