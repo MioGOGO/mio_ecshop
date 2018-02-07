@@ -28,9 +28,6 @@ class IndexController extends Controller
             'token' => $token,
             'loginStatus' => empty( $token ) ? 0 : 1,
         ];
-        if( $_GET['token'] ){
-            setcookie( 'dckc-token',$_GET['token'],time()+172800 );
-        }
         return view('indexdckc',  ['pageData'=> json_encode( $res)]  );
 
     }
