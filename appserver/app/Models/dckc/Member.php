@@ -471,7 +471,7 @@ class Member extends BaseModel {
             $wechat = new Wechat($config['app_id'], $config['app_secret']);
 
             $scope = 'snsapi_userinfo';
-            $referer = 'http://h5.uhdog.com/#/';
+            $referer = 'http://h5.uhdog.com/?#/';
             // nginx 反响代理
             if(env('environment') == 'online') {
                 $url  = url('/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope);
@@ -479,6 +479,7 @@ class Member extends BaseModel {
                 // $url = 'http://iniudan.cn/auth.' . env('environment') . '/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope;
                 $url  = url('/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope);
             }
+
             return redirect( $wechat->getWeChatAuthorizeURL($url, $scope) );
 
 
