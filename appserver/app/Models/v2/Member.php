@@ -583,6 +583,7 @@ class Member extends BaseModel {
 
                 $platform = 'wechat';
 
+                Log::debug('openid: '.$open_id);
                 if($scope == "snsapi_userinfo"){
                     if (!$userinfo) {
                         return self::formatError(self::BAD_REQUEST, trans('message.member.auth.error'));
