@@ -22,7 +22,7 @@ class IndexController extends Controller
         $token = isset( $_COOKIE['dckc_token'] ) ? $_COOKIE['dckc_token']  : '';
         $res['user'] = [
             'token' => $token,
-            'iflogin' => empty( $token ) ? 0 : 1,
+            'loginStatus' => empty( $token ) ? 0 : 1,
         ];
         setcookie( 'mio','wudi' );
         return view('indexdckc',  ['pageData'=> json_encode( $res)]  );
