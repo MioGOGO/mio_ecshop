@@ -42,6 +42,10 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
     $app->get('delivery/checkRange','DeliveryController@checkRange');
 
 });
+
+$app->group(['namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss']],function($app){
+    $app->get('index','IndexController@index');
+});
 //wx openid
 $app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss']], function($app)
 {
