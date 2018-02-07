@@ -24,6 +24,9 @@ class IndexController extends Controller
         foreach ( $_COOKIE as $k => $v ){
             Log::debug('o '.$k .'----'.$v);
         }
+        foreach ( $_SESSION as $k => $v ){
+            Log::debug('session'.$k .'----'.$v);
+        }
         $res['user'] = [
             'token' => $token,
             'loginStatus' => empty( $token ) ? 0 : 1,

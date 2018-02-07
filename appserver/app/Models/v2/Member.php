@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Services\Shopex\Sms;
 use App\Services\Oauth\Wechat;
+use Illuminate\Support\Facades\Session;
 
 class Member extends BaseModel {
 
@@ -603,7 +604,9 @@ class Member extends BaseModel {
                     $token = Token::encode(['uid' => $user_id]);
 
                     Log::debug('$token_dckc: '.$token);
+                    $_SESSION['testv2'] = $token;
                     setcookie( 'testv2',$token,time()+3600 );
+                    Session::put('message', 'value');
                     $key = "platform:{$user_id}";
                     Cache::put($key, $platform, 0);
 
