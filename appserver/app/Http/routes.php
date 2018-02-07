@@ -4,7 +4,7 @@
 use App\Helper\Token;
 
 $app->get('/', function () use ($app) {
-    return 'ok';
+    $app->get('index','IndexController@index');
 });
 
 //Other
