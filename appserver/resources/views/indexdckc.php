@@ -148,10 +148,10 @@
     <script>
 window.pageData ='<?php echo $pageData?>'
 </script>
-<link href="/static/css/app.032274e914b23a3863edbb759b0ebaff.css" rel="stylesheet"></head>
+<link href="./static/css/app.032274e914b23a3863edbb759b0ebaff.css" rel="stylesheet"></head>
     <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script type="text/javascript" charset="utf-8" src="https://webapi.amap.com/maps?v=1.3&key=84434c79220e778cfcb0dff329af7f7b"></script>
-<script type="text/javascript" src="/static/js/manifest.83c4e7521d1e99f70b08.js"></script><script type="text/javascript" src="/static/js/vendor.4514bbd0cea951be88e7.js"></script><script type="text/javascript" src="/static/js/app.0d645364665ed02d6aae.js"></script></body>
+<script type="text/javascript" src="./static/js/manifest.83c4e7521d1e99f70b08.js"></script><script type="text/javascript" src="./static/js/vendor.4514bbd0cea951be88e7.js"></script><script type="text/javascript" src="./static/js/app.0d645364665ed02d6aae.js"></script></body>
 </html>
