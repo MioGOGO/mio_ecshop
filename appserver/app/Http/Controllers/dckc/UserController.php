@@ -206,7 +206,7 @@ class UserController extends Controller
 
 
             $url = Member::authDckcLogin( $this->validated );
-            $data['redriect'] = $url;
+            $data['redirect'] = $url;
 
             return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$data]) );
 
