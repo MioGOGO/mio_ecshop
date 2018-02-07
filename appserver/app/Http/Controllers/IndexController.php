@@ -9,13 +9,31 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\dckc\Goods;
+
 class IndexController extends Controller
 {
 
 
     public function index(){
 
-        return view('indexdckc',  ['pageData'=> json_encode( array() )]  );
+        $data = Goods::getHomeList( ['type'=>'now'] );
+
+        return view('indexdckc',  ['pageData'=> json_encode( $data)]  );
+
+    }
+    public function getlist()
+    {
+
+        $rules = [
+            'type' => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $data = Goods::getHomeList($this->validated);
+
+        return $this->json($data);
 
     }
 
