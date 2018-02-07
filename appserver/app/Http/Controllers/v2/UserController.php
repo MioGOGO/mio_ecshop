@@ -274,7 +274,7 @@ class UserController extends Controller
           }
 
           if (isset($_GET['referer'])) {
-              setcookie( 'dckc-token',$data['token'], time()+12800 );
+              setcookie( 'dckc-token',$data['token'],time()+172800 );
               return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
           }
           return $this->json(['token' => $data]);
