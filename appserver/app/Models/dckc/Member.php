@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\dckc;
+use App\Helper\ProgramLong;
 use App\Models\BaseModel;
 use App\Helper\Token;
 use \DB;
@@ -458,6 +459,30 @@ class Member extends BaseModel {
     }
 
     public static function authDckc( array $attributes ){
+        $uid = Token::authorization();
+        if(!$uid){
+            $oauth = Configs::where(['type' => 'oauth', 'status' => 1, 'code' => 'wechat.web'])->first();
+            $config = Configs::verifyConfig(['app_id', 'app_secret'], $oauth);
+
+            if (!$oauth || !$config) {
+                return self::formatError(self::BAD_REQUEST, trans('message.config.oauth.wechat'));
+            }
+
+            $wechat = new Wechat($config['app_id'], $config['app_secret']);
+
+            $scope = 'snsapi_userinfo';
+            $referer = 'http://h5.uhdog.com/#/';
+            // nginx 反响代理
+            if(env('environment') == 'online') {
+                $url  = url('/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope);
+            }else{
+                // $url = 'http://iniudan.cn/auth.' . env('environment') . '/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope;
+                $url  = url('/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope);
+            }
+            return $wechat->getWeChatAuthorizeURL($url, $scope);
+
+
+        }
         extract($attributes);
         $userinfo = null;
 //        $userinfo = self::getUserByWeixin($access_token, $open_id);
