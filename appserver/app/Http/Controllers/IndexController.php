@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\dckc\Goods;
+use Log;
 
 class IndexController extends Controller
 {
