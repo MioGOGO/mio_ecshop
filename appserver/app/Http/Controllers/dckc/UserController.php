@@ -196,7 +196,7 @@ class UserController extends Controller
     public function authDckc(){
 
         $rules = [
-            'redriect' => 'required|string|min:1'
+            'redirect' => 'required|string|min:1'
         ];
 
         if ($error = $this->validateInputDckc($rules)) {
