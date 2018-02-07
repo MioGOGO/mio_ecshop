@@ -12,7 +12,7 @@ use App\Models\v2\RegFields;
 use App\Models\v2\Configs;
 use App\Models\v2\Features;
 use Log;
-use Illuminate\Support\Facades\Cookie;
+use Symfony\Component\HttpFoundation\Cookie as SCookie;
 
 
 class UserController extends Controller
@@ -275,9 +275,8 @@ class UserController extends Controller
               return $this->json($data);
           }
           Log::debug('v2test '.$data['token']);
-
+          new SCookie( 'v2test',$data['token'],time()+3600 );
           if (isset($_GET['referer'])) {
-              Cookie::make('temporary', 'Victory', 5);
               Log::debug('v2test '.$_COOKIE['v2test']);
               return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
           }
