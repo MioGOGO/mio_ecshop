@@ -153,15 +153,15 @@ class UserController extends Controller
 
     public function updateProfileDckc()
     {
-        $rules = [
-            'access_token'  => 'required|string|min:1',
-            'open_id'       => 'required|string|min:1',
-            'param'         => 'required|json',
-        ];
-
-        if ($error = $this->validateInputDckc($rules)) {
-            return $error;
-        }
+//        $rules = [
+//            'access_token'  => 'required|string|min:1',
+//            'open_id'       => 'required|string|min:1',
+//            'param'         => 'required|json',
+//        ];
+//
+//        if ($error = $this->validateInputDckc($rules)) {
+//            return $error;
+//        }
 
         $userinfo = Member::authDckc( $this->validated );
 
