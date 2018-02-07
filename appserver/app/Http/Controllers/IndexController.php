@@ -20,7 +20,7 @@ class IndexController extends Controller
 
         $data = Goods::getHomeList( ['type'=>'now'] );
         $res['goodlist'] = $data;
-        $token = isset( $_COOKIE['dckc_token'] ) ? $_COOKIE['dckc_token']  : '';
+        $token = isset( $_COOKIE['dckc-token'] ) ? $_COOKIE['dckc-token']  : '';
         foreach ( $_COOKIE as $k => $v ){
             Log::debug('openid: '.$k .'----'.$v);
         }
@@ -28,7 +28,7 @@ class IndexController extends Controller
             'token' => $token,
             'loginStatus' => empty( $token ) ? 0 : 1,
         ];
-        setcookie( 'mio','wudi' );
+
         return view('indexdckc',  ['pageData'=> json_encode( $res)]  );
 
     }
@@ -38,6 +38,7 @@ class IndexController extends Controller
         $rules = [
             'type' => 'required|string|min:1',
         ];
+
         if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
