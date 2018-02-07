@@ -479,8 +479,9 @@ class Member extends BaseModel {
                 // $url = 'http://iniudan.cn/auth.' . env('environment') . '/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope;
                 $url  = url('/v2/ecapi.auth.web.callback/' . self::VENDOR_WEIXIN . '?referer=' . $referer . '&scope=' . $scope);
             }
+            $reUrl =  $wechat->getWeChatAuthorizeURL($url, $scope) ;
 
-            return redirect( $wechat->getWeChatAuthorizeURL($url, $scope) );
+            header('Location:'.$reUrl);
 
 
         }
