@@ -274,12 +274,10 @@ class UserController extends Controller
           if (isset($data['error'])) {
               return $this->json($data);
           }
+          Log::debug('v2test '.$data['token']);
 
-         Log::debug('v2test '.$data['token']);
-
-         setcookie( 'v2test',$data['token'],time()+172800);
-         Cookie::queue('test', 'Hello, Laravel', 10);
           if (isset($_GET['referer'])) {
+              Cookie::make('temporary', 'Victory', 5);
               Log::debug('v2test '.$_COOKIE['v2test']);
               return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
           }
