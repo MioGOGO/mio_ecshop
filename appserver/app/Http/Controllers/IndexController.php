@@ -18,7 +18,9 @@ class IndexController extends Controller
     public function index(){
 
         $data = Goods::getHomeList( ['type'=>'now'] );
-
+        $token = isset( $_COOKIE['dckc_token'] ) ? $_COOKIE['dckc_token']  : '';
+        $data['iflogin'] = empty( $token ) ? 0 : 1;
+        setcookie( 'mio','wudi' );
         return view('indexdckc',  ['pageData'=> json_encode( $data)]  );
 
     }
