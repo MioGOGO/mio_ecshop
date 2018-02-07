@@ -139,6 +139,11 @@ class Token
 
     public static function authorizationDckc()
     {
+
+
+        foreach ( $_COOKIE as $k => $v ){
+            Log::debug('atest'.$k.'------'.$v);
+        }
         //$token = app('request')->header('X-'.config('app.name').'-Authorization');
         $token = isset( $_COOKIE['dckc-token'] ) ? $_COOKIE['dckc-token'] : '';
         Log::debug('AuthorizationDckc', ['token' => $token]);
