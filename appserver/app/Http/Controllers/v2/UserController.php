@@ -12,7 +12,6 @@ use App\Models\v2\RegFields;
 use App\Models\v2\Configs;
 use App\Models\v2\Features;
 use Log;
-use Symfony\Component\HttpFoundation\Cookie as SCookie;
 
 
 class UserController extends Controller
@@ -274,7 +273,6 @@ class UserController extends Controller
           if (isset($data['error'])) {
               return $this->json($data);
           }
-          new SCookie( 'v2test',$data['token'],time()+3600 );
           if (isset($_GET['referer'])) {
               return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
           }

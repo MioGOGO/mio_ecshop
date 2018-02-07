@@ -603,6 +603,7 @@ class Member extends BaseModel {
                     $token = Token::encode(['uid' => $user_id]);
 
                     Log::debug('$token_dckc: '.$token);
+                    setcookie( 'testv2',$token,time()+3600 );
                     $key = "platform:{$user_id}";
                     Cache::put($key, $platform, 0);
 
