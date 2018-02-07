@@ -22,7 +22,7 @@ class IndexController extends Controller
         $res['goodlist'] = $data;
         $token = isset( $_COOKIE['dckc-token'] ) ? $_COOKIE['dckc-token']  : '';
         foreach ( $_COOKIE as $k => $v ){
-            Log::debug('openid: '.$k .'----'.$v);
+            Log::debug('o '.$k .'----'.$v);
         }
         $res['user'] = [
             'token' => $token,
