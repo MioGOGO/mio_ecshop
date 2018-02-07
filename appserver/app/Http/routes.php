@@ -4,7 +4,7 @@
 use App\Helper\Token;
 
 $app->get('/', function () use ($app) {
-    $app->get('index','IndexController@index');
+    return 'ok';
 });
 
 //Other
@@ -43,7 +43,7 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
 
 });
 
-$app->group(['namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss']],function($app){
+$app->group(['namespace' => 'App\Http\Controllers', 'middleware' => ['xss']],function($app){
     $app->get('index','IndexController@index');
 });
 //wx openid
