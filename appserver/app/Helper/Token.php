@@ -137,6 +137,25 @@ class Token
         return false;
     }
 
+    public static function authorizationDckc()
+    {
+        //$token = app('request')->header('X-'.config('app.name').'-Authorization');
+        $token = isset( $_COOKIE['dckc-token'] ) ? $_COOKIE['dckc-token'] : '';
+        Log::debug('AuthorizationDckc', ['token' => $token]);
+        if ($payload = self::decode($token)) {
+            Log::debug('payload', ['payload' => $payload]);
+            if (is_object($payload) && property_exists($payload, 'uid')) {
+                return $payload->uid;
+            }
+        }
+
+        if ($payload == 10002) {
+            return 'token-expired';
+        }
+
+        return false;
+    }
+
     public static function refresh()
     {
         $token = app('request')->header('X-'.config('app.name').'-Authorization');

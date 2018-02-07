@@ -459,7 +459,7 @@ class Member extends BaseModel {
     }
 
     public static function authDckc( array $attributes ){
-        $uid = Token::authorization();
+        $uid = Token::authorizationDckc();
         if(!$uid){
             $oauth = Configs::where(['type' => 'oauth', 'status' => 1, 'code' => 'wechat.web'])->first();
             $config = Configs::verifyConfig(['app_id', 'app_secret'], $oauth);
