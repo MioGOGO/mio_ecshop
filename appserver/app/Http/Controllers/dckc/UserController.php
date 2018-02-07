@@ -368,13 +368,9 @@ class UserController extends Controller
           if (isset($data['error'])) {
               return $this->json($data);
           }
-         Log::debug('v2test '.$data['token']);
-
-          setcookie( 'test',$data['token'],time()+10000);
           if (isset($_GET['referer'])) {
-
-              Log::debug('v2test '.$_COOKIE['test']);
-              return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
+              //return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
+              return redirect(urldecode($_GET['referer']) );
           }
           return $this->json(['token' => $data]);
      }
