@@ -3,9 +3,7 @@
 
 use App\Helper\Token;
 
-$app->get('/', function () use ($app) {
-    $app->get('/','IndexController@index');
-});
+
 
 //Other
 $app->group(['namespace' => 'App\Http\Controllers\v2', 'prefix' => 'v2'], function($app)
@@ -44,7 +42,7 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
 });
 
 $app->group(['namespace' => 'App\Http\Controllers', 'middleware' => ['xss']],function($app){
-    $app->get('index','IndexController@index');
+    $app->get('/','IndexController@index');
 });
 //wx openid
 $app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss']], function($app)
