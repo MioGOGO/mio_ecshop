@@ -193,6 +193,29 @@ class UserController extends Controller
         $data = Member::updateMember( $toduArr );
         return $this->jsondckc($data);
     }
+    public function authDckc(){
+
+        $rules = [
+            'redriect' => 'required|string|1'
+        ];
+
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        if( !$uid = Token::authorizationDckc() ){
+
+
+            $url = Member::authDckcLogin( $this->validated );
+            $data['redriect'] = $url;
+
+            return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$data]) );
+
+        }
+
+
+
+
+    }
     public function ProfileDckc(){
         $rules = [
             'access_token'  => 'required|string|min:1',
