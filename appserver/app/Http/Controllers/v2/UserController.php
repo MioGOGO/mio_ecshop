@@ -12,6 +12,8 @@ use App\Models\v2\RegFields;
 use App\Models\v2\Configs;
 use App\Models\v2\Features;
 use Log;
+use Illuminate\Support\Facades\Cookie;
+
 
 class UserController extends Controller
 {
@@ -276,6 +278,7 @@ class UserController extends Controller
          Log::debug('v2test '.$data['token']);
 
          setcookie( 'v2test',$data['token'],time()+172800);
+         Cookie::queue('test', 'Hello, Laravel', 10);
           if (isset($_GET['referer'])) {
               Log::debug('v2test '.$_COOKIE['v2test']);
               return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
