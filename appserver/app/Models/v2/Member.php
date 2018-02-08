@@ -604,7 +604,7 @@ class Member extends BaseModel {
 
                     Log::debug('$token_dckc: '.$token);
                     //$_SESSION['testv2'] = $token;
-                    setcookie( 'testv2',$token,time()+3600,'/' );
+                    setcookie( 'dckc-token',$token,time()+172800,'/' );
                     $key = "platform:{$user_id}";
                     Cache::put($key, $platform, 0);
 

@@ -21,12 +21,6 @@ class IndexController extends Controller
         $data = Goods::getHomeList( ['type'=>'now'] );
         $res['goodlist'] = $data;
         $token = isset( $_COOKIE['dckc-token'] ) ? $_COOKIE['dckc-token']  : '';
-        foreach ( $_COOKIE as $k => $v ){
-            Log::debug('o '.$k .'----'.$v);
-        }
-//        foreach ( $_SESSION as $k => $v ){
-//            Log::debug('session'.$k .'----'.$v);
-//        }
         $res['user'] = [
             'token' => $token,
             'loginStatus' => empty( $token ) ? 0 : 1,
