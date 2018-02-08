@@ -409,7 +409,7 @@ class OrderGoods extends BaseModel {
         if (empty($user)) {
             return self::formatErrorDckc(10039,'is not a  wx user');
         }
-        $open_id = $user->openid_id;
+        $open_id = $user->open_id;
         Log::debug('order_dckc: '.$open_id);
         return Payment::payDckc( [ 'uid'=>$user_id,'order'=>$new_order_id,'openid'=>$open_id ] );
     }

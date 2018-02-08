@@ -297,6 +297,7 @@ class Payment extends BaseModel {
                 'timeStamp' => $time_stamp,
                 'package' => $pack,
                 'paySign' => $sign,
+                'signType' => 'MD5',
             ];
 
             return self::formatBodyDckc(['data' => $body]);
