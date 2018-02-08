@@ -352,7 +352,7 @@ class Member extends BaseModel {
                         return self::formatBodyDckc(self::UNKNOWN_ERROR);
                     }
                 }
-                return self::formatBodyDckc(['user' => $model->toArray()]);
+                return self::formatBodyDckc(['data' => $model->toArray()]);
 
             }   else {
 
