@@ -55,7 +55,7 @@ class UserAddress extends BaseModel
     public static function formatGetConsigneeDckc( $user_id ){
         $resArray = [];
         $objData = self::where('user_id',$user_id)->first();
-        if( !$objData ){
+        if( $objData ){
             $resArray['id'] = $objData->id;
             $resArray['name'] = $objData->consignee;
             $resArray['phone'] = $objData->mobile;
