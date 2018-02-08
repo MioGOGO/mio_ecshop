@@ -27,14 +27,14 @@ class UserAddress extends BaseModel
     }
 
 
-    public static function get_consignee_dckc($user_id)
+    public static function get_consignee_dckc()
     {
-        //$uid = Token::authorization();
+        $user_id = Token::authorizationDckc();
         $arr = array();
         if ($user_id) {
             return self::where('user_id',$user_id)->first();
         }
-        if ($uid > 0)
+        if ($user_id > 0)
         {
             /* 取默认地址 */
             // $sql = "SELECT ua.*".
@@ -43,7 +43,7 @@ class UserAddress extends BaseModel
 
             // $arr = $GLOBALS['db']->getRow($sql);
             $arr = self::join('users','user_address.address_id', '=', 'users.address_id')
-                ->where('users.user_id',$uid)
+                ->where('users.user_id',$user_id)
                 ->first()->toArray();
         }
 

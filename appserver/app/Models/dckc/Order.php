@@ -184,7 +184,7 @@ class Order extends BaseModel {
 
         $result = array();
         if (!empty($data)) {
-            $consignee_info = UserAddress::get_consignee_dckc($uid);
+            $consignee_info = UserAddress::get_consignee_dckc( );
             foreach ($data as $k => $v) {
                 $_tmp = array();
                 $counter = 0;

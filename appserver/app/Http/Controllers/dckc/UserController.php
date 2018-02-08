@@ -207,20 +207,7 @@ class UserController extends Controller
         return redirect(urldecode($this->validated['redirect']));
     }
     public function ProfileDckc(){
-        $rules = [
-            'access_token'  => 'required|string|min:1',
-            'open_id'       => 'required|string|min:1',
-        ];
-
-        if ($error = $this->validateInputDckc($rules)) {
-            return $error;
-        }
-
-        $userinfo = Member::authDckc( $this->validated );
-        if( !$userinfo ){
-            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
-        }
-        $consignee_info = UserAddress::get_consignee_dckc( $userinfo->id );
+        $consignee_info = UserAddress::get_consignee_dckc();
         $result = array();
         if( !$consignee_info ){
             return self::jsondckc(BaseModel::formatErrorDckc(10038, 'user not found'));

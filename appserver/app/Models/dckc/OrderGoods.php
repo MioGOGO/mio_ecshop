@@ -170,7 +170,7 @@ class OrderGoods extends BaseModel {
 //        }
 
 
-        $consignee_info = UserAddress::get_consignee_dckc($user_id);
+        $consignee_info = UserAddress::get_consignee_dckc( );
 
 //        if (!$consignee_info) {
 //            return self::formatError(self::BAD_REQUEST,trans('message.consignee.not_found'));
