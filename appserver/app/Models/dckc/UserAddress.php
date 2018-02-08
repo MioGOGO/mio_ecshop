@@ -56,7 +56,7 @@ class UserAddress extends BaseModel
         $resArray = [];
         $objData = self::where('user_id',$user_id)->first();
         if( $objData ){
-            $resArray['id'] = $objData->id;
+            $resArray['id'] = $user_id;
             $resArray['name'] = $objData->consignee;
             $resArray['phone'] = $objData->mobile;
             $resArray['address'] = $objData->address;
