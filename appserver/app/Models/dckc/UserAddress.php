@@ -33,7 +33,7 @@ class UserAddress extends BaseModel
         $arr = array();
         if ($user_id) {
             if( $isFormat ){
-                self::formatGetConsigneeDckc( $user_id );
+                return self::formatGetConsigneeDckc( $user_id );
             }
             return self::where('user_id',$user_id)->first();
         }
