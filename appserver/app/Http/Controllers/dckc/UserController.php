@@ -163,11 +163,11 @@ class UserController extends Controller
 //            return $error;
 //        }
 
-        $userinfo = Member::authDckc( array() );
-
-        if( !$userinfo ){
-            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
-        }
+//        $userinfo = Member::authDckc( array() );
+//
+//        if( !$userinfo ){
+//            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
+//        }
 
 
         $rules = [
