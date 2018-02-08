@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Models\dckc\Goods;
 use Log;
+use App\Models\dckc\UserAddress;
 
 class IndexController extends Controller
 {
@@ -22,9 +23,13 @@ class IndexController extends Controller
         $res['goodlist'] = $data;
         $token = isset( $_COOKIE['dckc-token'] ) ? $_COOKIE['dckc-token']  : '';
         $res['user'] = [
-            'token' => $token,
+            //'token' => $token,
             'loginStatus' => empty( $token ) ? 0 : 1,
         ];
+        if( $token ){
+            $consignee_info = UserAddress::get_consignee_dckc( true );
+            $res['user'] = array_push( $res['user'],$consignee_info );
+        }
         return view('indexdckc',  ['pageData'=> json_encode( $res)]  );
 
     }
