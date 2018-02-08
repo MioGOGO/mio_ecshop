@@ -205,9 +205,9 @@ class Payment extends BaseModel {
             $nonce_str = str_random(32);
             $time_stamp = (string)time();
             if ($code == 'wxpay.wxa') {
-                $notify_url = url('/dckc/order/notify/wxpay.wxa');
+                $notify_url = url('/v2/order.notify.wxpay.wxa');
             } else {
-                $notify_url = url('/dckc/order/notify/wxpay.web');
+                $notify_url = url('/v2/order.notify.wxpay.web');
             }
 
 
