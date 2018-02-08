@@ -207,18 +207,11 @@ class UserController extends Controller
         return redirect(urldecode($this->validated['redirect']));
     }
     public function ProfileDckc(){
-        $consignee_info = UserAddress::get_consignee_dckc();
-        $result = array();
-        if( !$consignee_info ){
+        $consignee_info = UserAddress::get_consignee_dckc( true );
+        if( !$consignee_info || empty( $consignee_info ) ){
             return self::jsondckc(BaseModel::formatErrorDckc(10038, 'user not found'));
         }
-        $result['id'] = $consignee_info->id;
-        $result['name'] = $consignee_info->consignee;
-        $result['phone'] = $consignee_info->mobile;
-        $result['address'] = $consignee_info->address;
-        $result['otherPoiInfo'] = $consignee_info->sign_building;
-        $result['poiName'] = $consignee_info->address_name;
-        return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$result]) );
+        return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$consignee_info]) );
     }
 
     /**

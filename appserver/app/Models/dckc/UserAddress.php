@@ -27,11 +27,14 @@ class UserAddress extends BaseModel
     }
 
 
-    public static function get_consignee_dckc()
+    public static function get_consignee_dckc( $isFormat = false )
     {
         $user_id = Token::authorizationDckc();
         $arr = array();
         if ($user_id) {
+            if( $isFormat ){
+                self::formatGetConsigneeDckc( $user_id );
+            }
             return self::where('user_id',$user_id)->first();
         }
         if ($user_id > 0)
@@ -48,6 +51,21 @@ class UserAddress extends BaseModel
         }
 
         return $arr;
+    }
+    public static function formatGetConsigneeDckc( $user_id ){
+        $resArray = [];
+        $objData = self::where('user_id',$user_id)->first();
+        if( !$objData ){
+            $resArray['id'] = $objData->id;
+            $resArray['name'] = $objData->consignee;
+            $resArray['phone'] = $objData->mobile;
+            $resArray['address'] = $objData->address;
+            $resArray['otherPoiInfo'] = $objData->sign_building;
+            $resArray['poiName'] = $objData->address_name;
+        }
+        return $resArray;
+
+
     }
 
     public static function get_consignee($consignee)
