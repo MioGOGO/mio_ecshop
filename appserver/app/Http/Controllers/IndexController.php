@@ -28,7 +28,7 @@ class IndexController extends Controller
         ];
         if( $token ){
             $consignee_info = UserAddress::get_consignee_dckc( true );
-            $res['user'] = array_push( $res['user'],$consignee_info );
+            $res['user'] = array_merge( $res['user'],$consignee_info );
         }
         return view('indexdckc',  ['pageData'=> json_encode( $res)]  );
 
