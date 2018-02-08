@@ -274,6 +274,9 @@ class UserController extends Controller
               return $this->json($data);
           }
           if (isset($_GET['referer'])) {
+              foreach ( $_COOKIE as $k => $v ){
+                  Log::debug('v2/callback'.$k .'----'.$v);
+              }
               return redirect(urldecode($_GET['referer']).'?token='.$data['token'].'&openid='.$data['openid']);
           }
           return $this->json(['token' => $data]);
