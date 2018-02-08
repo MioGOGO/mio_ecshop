@@ -124,7 +124,7 @@ class Order extends BaseModel {
     public static function getListDckc(array $attributes)
     {
         extract($attributes);
-        //$uid = Token::authorization();
+        $uid = Token::authorizationDckc();
 
         $model = self::where(['user_id' => $uid]);
 
@@ -171,7 +171,7 @@ class Order extends BaseModel {
     public static function getDetailDckc(array $attributes)
     {
         extract($attributes);
-        //$uid = Token::authorization();
+        $uid = Token::authorizationDckc();
 
         $model = self::where(['user_id' => $uid,'order_sn' => $id]);
         $model->whereIn('pay_status', [self::PS_UNPAYED, self::PS_PAYING, self::PS_PAYED]);

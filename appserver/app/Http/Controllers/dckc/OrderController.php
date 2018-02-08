@@ -73,37 +73,18 @@ class OrderController extends Controller
 
     }
     public function orderlist(){
-        $rules = [
-            'access_token'  => 'required|string|min:1',
-            'open_id'       => 'required|string|min:1',
-        ];
-        if ($error = $this->validateInputDckc($rules)) {
-            return $error;
-        }
-        $userinfo = Member::authDckc( $this->validated );
-
-        if( !$userinfo ){
-            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
-        }
-        $orderIinfo = Order::getListDckc( ['uid'=>$userinfo->id] );
+        $orderIinfo = Order::getListDckc( array() );
         return $this->jsondckc( $orderIinfo );
 
     }
     public function orderdetail(){
         $rules = [
-            'access_token'  => 'required|string|min:1',
             'id'        => 'required|string|min:1',
-            'open_id'       => 'required|string|min:1',
         ];
         if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
-        $userinfo = Member::authDckc( $this->validated );
-        if( !$userinfo ){
-            return self::jsondckc(BaseModel::formatErrorDckc(10031, 'user error'));
-        }
-
-        $orderInfo = Order::getDetailDckc( [ 'uid'=>$userinfo->id,'id'=>$this->validated['id'] ] );
+        $orderInfo = Order::getDetailDckc( $this->validated );
 
         return $this->jsondckc( $orderInfo );
 
