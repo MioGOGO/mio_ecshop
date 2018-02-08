@@ -212,7 +212,7 @@ class UserController extends Controller
         if( !$consignee_info ){
             return self::jsondckc(BaseModel::formatErrorDckc(10038, 'user not found'));
         }
-        $result['id'] = $userinfo->id;
+        $result['id'] = $consignee_info->id;
         $result['name'] = $consignee_info->consignee;
         $result['phone'] = $consignee_info->mobile;
         $result['address'] = $consignee_info->address;
