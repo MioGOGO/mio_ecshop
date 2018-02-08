@@ -92,6 +92,7 @@ class UserAddress extends BaseModel
     public static function addDckc( array  $attributes){
         extract($attributes);
 
+        $uid = Token::authorizationDckc();
         $model = new UserAddress;
         $model->user_id         = $uid;
         $model->consignee       = $name;
