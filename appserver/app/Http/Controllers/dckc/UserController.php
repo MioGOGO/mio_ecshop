@@ -170,7 +170,7 @@ class UserController extends Controller
         }
 
 
-        $rulesJson = [
+        $rules = [
             'name'          => 'required|string|min:1',
             'sex'           => 'required|min:1',
             'phone'         => 'required|min:1',
@@ -179,18 +179,11 @@ class UserController extends Controller
             'otherPoiInfo'  => 'required|string|min:1',
 
         ];
-        if( !json_decode( $this->validated['param'],true ) ){
-            return self::jsondckc(BaseModel::formatErrorDckc(10032, 'json format error'));
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
         }
-        if( $err = $this->vaidJsonOrderParsmrs( json_decode( $this->validated['param'],true ),$rulesJson,true ) ){
-            return $err;
-        }
-        unset( $this->validated['param'] );
 
-        $toduArr = array_merge( $this->validated,$this->datavalid,['uid'=>$userinfo->id] );
-
-
-        $data = Member::updateMember( $toduArr );
+        $data = Member::updateMember( $this->validated );
         return $this->jsondckc($data);
     }
     public function authDckc(){
@@ -211,10 +204,7 @@ class UserController extends Controller
             return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$data]) );
 
         }
-
-
-
-
+        return redirect(urldecode($this->validated['redirect']));
     }
     public function ProfileDckc(){
         $rules = [

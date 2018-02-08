@@ -287,8 +287,10 @@ class Member extends BaseModel {
     {
         extract($attributes);
 
-        //$uid = Token::authorization();
-
+        $uid = Token::authorizationDckc();
+        if( !$uid ){
+            return self::formatErrorDckc( '10051','token error' );
+        }
         if ($model = Member::where('user_id', $uid)->first())
         {
             if (isset($sex)) {
