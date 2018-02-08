@@ -26,9 +26,7 @@ class OrderController extends Controller
 
     public function add(){
         $rules = [
-            'access_token'  => 'required|string|min:1',
             'params'        => 'required|string|min:1',
-            'open_id'       => 'required|string|min:1',
         ];
 
         if ($error = $this->validateInputDckc($rules)) {
