@@ -299,12 +299,12 @@ class OrderGoods extends BaseModel {
             $goodInfo = Goods::where(['is_delete' => 0, 'goods_id' => $goods['id']])->first();
             if( !$goodInfo ){
                 Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
-                return self::formatError(self::BAD_REQUEST,'goods  not exists');
+                return self::formatErrorDckc(self::BAD_REQUEST,'goods  not exists');
             }
 
             if( $goods['amount'] != ($goods['count']*$goodInfo->shop_price) ){
                 Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
-                return self::formatError(self::BAD_REQUEST,'goods price error');
+                return self::formatErrorDckc(self::BAD_REQUEST,'goods price error');
             }
             $order_good                 = new OrderGoods;
             $order_good->order_id       = $new_order_id;
@@ -326,7 +326,7 @@ class OrderGoods extends BaseModel {
         }
         if( $checkTotalPrice != $totalAmount ){
             Order::updateOrCreate( ['order_id' => $new_order_id ],['order_status' => 3] );
-            return self::formatError(10035,'list price ！= totalfee  ');
+            return self::formatErrorDckc(10035,'list price ！= totalfee  ');
         };
 
         /* 修改拍卖活动状态 */
@@ -407,7 +407,7 @@ class OrderGoods extends BaseModel {
 
         $user = Sns::where('user_id', $user_id)->first();
         if (empty($user)) {
-            return self::formatError(10039,'is not a  wx user');
+            return self::formatErrorDckc(10039,'is not a  wx user');
         }
         $open_id = $user->openid_id;
         Log::debug('order_dckc: '.$open_id);

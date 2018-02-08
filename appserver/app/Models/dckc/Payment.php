@@ -112,11 +112,11 @@ class Payment extends BaseModel {
             $payment = self::where(['type' => 'payment', 'status' => 1, 'code' => $code])->first();
 
             if (!$payment) {
-                return self::formatError(self::NOT_FOUND);
+                return self::formatErrorDckc(self::NOT_FOUND);
             }
             $config = self::checkConfig(['app_id', 'app_secret', 'mch_id', 'mch_key'], $payment);
             if (!$config) {
-                return self::formatError(self::UNKNOWN_ERROR);
+                return self::formatErrorDckc(self::UNKNOWN_ERROR);
             }
 
             $wxpay = new WxPay();
