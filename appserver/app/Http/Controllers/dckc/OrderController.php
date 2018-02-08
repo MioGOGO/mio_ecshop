@@ -26,7 +26,7 @@ class OrderController extends Controller
 
     public function add(){
         $rules = [
-            'params'        => 'required|string|min:1',
+            'params'        => 'required|min:1',
         ];
 
         if ($error = $this->validateInputDckc($rules)) {
