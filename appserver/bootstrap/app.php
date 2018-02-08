@@ -74,6 +74,7 @@ $app->routeMiddleware([
     'token' => App\Http\Middleware\TokenAuthenticate::class,
     'xss'  => App\Http\Middleware\XSSProtection::class,
     'openid' => App\Http\Middleware\OpenidAuthenticate::class,
+    'dckctoken' => App\Http\Middleware\TokenDckcAuthenticate::class,
 ]);
 
 /*
