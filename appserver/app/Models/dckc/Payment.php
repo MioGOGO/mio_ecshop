@@ -249,23 +249,23 @@ class Payment extends BaseModel {
                 'trade_type' => 'JSAPI'
             ];
 
-            //$inputParams['sign'] = $wxpay->createMd5Sign($inputParams);
+            $inputParams['sign'] = $wxpay->createMd5Sign($inputParams);
 
 
-            ////测试专用
-
-            $body = [
-                'appId' => $config['app_id'],
-                'mchId' => $config['mch_id'],
-                'prepayId' => 'test',
-                'nonceStr' => $nonce_str,
-                'timeStamp' => $time_stamp,
-                'package' => 'prepay_id=test',
-                'paySign' => 'ddddddddd',
-                'signType' => 'MD5',
-                'outTradeNo' => $order->order_sn,
-            ];
-            return self::formatBodyDckc(['data' => $body]);
+//            ////测试专用
+//
+//            $body = [
+//                'appId' => $config['app_id'],
+//                'mchId' => $config['mch_id'],
+//                'prepayId' => 'test',
+//                'nonceStr' => $nonce_str,
+//                'timeStamp' => $time_stamp,
+//                'package' => 'prepay_id=test',
+//                'paySign' => 'ddddddddd',
+//                'signType' => 'MD5',
+//                'outTradeNo' => $order->order_sn,
+//            ];
+//            return self::formatBodyDckc(['data' => $body]);
 
 
 
@@ -299,7 +299,8 @@ class Payment extends BaseModel {
                 'paySign' => $sign,
             ];
 
-            return self::formatBodyDckc(['order' => $order, 'wxpay' => $body]);
+            return self::formatBodyDckc(['data' => $body]);
+            //return self::formatBodyDckc(['order' => $order, 'wxpay' => $body]);
         }
 
     }

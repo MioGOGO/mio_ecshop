@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\dckc;
+use App\Helper\Token;
 use App\Models\BaseModel;
 
 use App\Services\Shopex\Erp;
@@ -140,6 +141,7 @@ class OrderGoods extends BaseModel {
     public static function checkout(array $attributes)
     {
 
+        $user_id = Token::authorizationDckc();
         extract($attributes);
         //$consignee = UserAddress::addDckc( $attributes );
         //-- 完成所有订单操作，提交到数据库
@@ -402,8 +404,14 @@ class OrderGoods extends BaseModel {
 
         Erp::order($orderObj->order_sn, 'order_create');
         //调取为微信支付。
-        $final = Payment::payDckc( [ 'uid'=>$user_id,'order'=>$new_order_id,'openid'=>$open_id ] );
-        return $final;
+
+        $user = Sns::where('user_id', $user_id)->first();
+        if (empty($user)) {
+            return self::formatError(10039,'is not a  wx user');
+        }
+        $open_id = $user->openid_id;
+        Log::debug('order_dckc: '.$open_id);
+        return Payment::payDckc( [ 'uid'=>$user_id,'order'=>$new_order_id,'openid'=>$open_id ] );
     }
 
 }
