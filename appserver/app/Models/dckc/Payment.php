@@ -296,6 +296,7 @@ class Payment extends BaseModel {
             //生成签名
             $sign = $wxpay->createMd5Sign($prePayParams);
 
+            Log::debug('wxdebug:'.$wxpay->debugInfo );
             Log::debug('sign----- '.$sign );
 
             $body = [
