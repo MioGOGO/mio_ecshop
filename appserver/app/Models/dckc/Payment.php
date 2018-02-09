@@ -248,9 +248,13 @@ class Payment extends BaseModel {
                 //交易类型:JSAPI,NATIVE,APP
                 'trade_type' => 'JSAPI'
             ];
+            foreach ( $inputParams as $k => $v ){
+                Log::debug('$inputParams: '.$k.'--------'.$v);
+            }
 
             $inputParams['sign'] = $wxpay->createMd5Sign($inputParams);
 
+            Log::debug('sign----- '.$inputParams['sign'] );
 
 //            ////测试专用
 //
@@ -285,9 +289,14 @@ class Payment extends BaseModel {
                 'nonceStr' => $nonce_str,
                 'signType' => 'MD5'
             ];
+            foreach ( $prePayParams as $k => $v ){
+                Log::debug('$prePayParams: '.$k.'--------'.$v);
+            }
 
             //生成签名
             $sign = $wxpay->createMd5Sign($prePayParams);
+
+            Log::debug('sign----- '.$sign );
 
             $body = [
                 'appId' => $config['app_id'],
