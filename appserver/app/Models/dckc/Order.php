@@ -219,7 +219,7 @@ class Order extends BaseModel {
                 $_user['otherPoiInfo'] = $consignee_info->sign_building;
                 $_user['poiName'] = $consignee_info->address_name;
                 $_tmp['user'] = $_user;
-                $result[] = $_tmp;
+                $result = $_tmp;
             }
         }
         return self::formatBodyDckc(['data' => $result]);
