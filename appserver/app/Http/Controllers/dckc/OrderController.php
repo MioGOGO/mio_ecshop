@@ -90,7 +90,7 @@ class OrderController extends Controller
         if ($error = $this->validateInputDckc($rules)) {
             return $error;
         }
-        $orderInfo = 'ok';
+        $orderInfo = OrderGoods::repayorder( $this->datavalid );
         return $this->jsondckc( $orderInfo );
     }
     /**

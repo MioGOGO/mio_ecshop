@@ -413,5 +413,20 @@ class OrderGoods extends BaseModel {
         Log::debug('order_dckc: '.$open_id);
         return Payment::payDckc( [ 'uid'=>$user_id,'order'=>$new_order_id,'openid'=>$open_id ] );
     }
+    public static function repayorder( array $attributes ){
+        $user_id = Token::authorizationDckc();
+        extract($attributes);
+        $user = Sns::where('user_id', $user_id)->first();
+        if (empty($user)) {
+            return self::formatErrorDckc(10039,'is not a  wx user');
+        }
+        if ( !$model = self::where(['order_sn' => $id, 'user_id' => $user_id])->first()) {
+            return self::formatErrorDckc(10040,'order is not exists');
+        }
+        $orderid = $model->id;
+        Log::debug('order_dckc: '.$orderid);
+        $open_id = $user->open_id;
+        return Payment::payDckc( [ 'uid'=>$user_id,'order'=>$orderid,'openid'=>$open_id ] );
+    }
 
 }
