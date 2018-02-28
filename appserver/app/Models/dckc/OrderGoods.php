@@ -420,7 +420,7 @@ class OrderGoods extends BaseModel {
         if (empty($user)) {
             return self::formatErrorDckc(10039,'is not a  wx user');
         }
-        if ( !$model = self::where(['order_sn' => $id, 'user_id' => $user_id])->first()) {
+        if ( !$model = Order::where(['order_sn' => $id, 'user_id' => $user_id])->first()) {
             return self::formatErrorDckc(10040,'order is not exists');
         }
         $orderid = $model->id;
