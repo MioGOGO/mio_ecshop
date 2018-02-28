@@ -49,6 +49,7 @@ $app->group(['namespace' => 'App\Http\Controllers', 'middleware' => ['xss']],fun
 $app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss','dckctoken']], function($app)
 {
     $app->post('order/create', 'OrderController@add');
+    $app->post('order/repay', 'OrderController@orderrepay');
     $app->get('order/list', 'OrderController@orderlist');
     $app->get('order/detail', 'OrderController@orderdetail');
     $app->get('userinfo/update','UserController@updateProfileDckc');

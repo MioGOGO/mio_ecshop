@@ -83,6 +83,16 @@ class OrderController extends Controller
 
 
     }
+    public function orderrepay(){
+        $rules = [
+            'id'        => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $orderInfo = 'ok';
+        return $this->jsondckc( $orderInfo );
+    }
     /**
      * POST /order/notify/:code
      */
