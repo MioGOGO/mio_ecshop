@@ -30,11 +30,11 @@ class TokenSellerAuthenticate
         $token = Token::authorizationSeller();
 
         if ($token === false) {
-            return show_error(10001, trans('message.token.invalid'));
+            return show_error(80010, trans('message.token.invalid'));
         }
 
         if ($token ===  'token-expired') {
-            return show_error(10002, trans('message.token.expired'));
+            return show_error(80011, trans('message.token.expired'));
         }
 
         return $next($request);
