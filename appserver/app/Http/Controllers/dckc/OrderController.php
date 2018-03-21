@@ -93,6 +93,29 @@ class OrderController extends Controller
         $orderInfo = OrderGoods::repayorder( $this->validated );
         return $this->jsondckc( $orderInfo );
     }
+    //确认发货的状态，seller 确认订单！
+    public function sellerDelivery(){
+        $rules = [
+            'id'        => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $data = Order::sellerDelivery( $this->validated );
+        return $this->jsondckc( $data );
+    }
+    //发货端获取订单信息
+    public function sellerGetOrderInfo(){
+        $rules = [
+            'id'        => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $orderInfo = Order::getDetailSeller( $this->validated );
+        return $this->jsondckc( $orderInfo );
+
+    }
     /**
      * POST /order/notify/:code
      */

@@ -119,6 +119,25 @@ class Token
         return $payload;
     }
 
+
+    public static function authorizationSeller(){
+
+        $token = app('request')->header('auth_token');
+        Log::debug('AuthorizationSeller', ['token' => $token]);
+        if ($payload = self::decode($token)) {
+            Log::debug('payload', ['payload' => $payload]);
+            if (is_object($payload) && property_exists($payload, 'uid')) {
+                return $payload->uid;
+            }
+        }
+
+        if ($payload == 10002) {
+            return 'token-expired';
+        }
+
+        return false;
+    }
+
     public static function authorization()
     {
         $token = app('request')->header('X-'.config('app.name').'-Authorization');

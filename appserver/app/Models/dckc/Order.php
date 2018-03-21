@@ -168,6 +168,90 @@ class Order extends BaseModel {
         }
         return self::formatBodyDckc(['data' => $result]);
     }
+    public static function sellerDelivery( array  $attributes ){
+        extract( $attributes );
+        $uid = Token::authorizationSeller();
+        if( !$uid ){
+            return self::formatErrorDckc( 8003,'this order seller Permission denied' );
+        }
+        $model = self::where('order_sn',$id);
+        $model->whereIn('pay_status', [self::PS_PAYED]);
+        $model->whereIn('order_status', [self::OS_UNCONFIRMED]);
+        $model->whereIn('shipping_status', [self::SS_UNSHIPPED])->first();
+        if( !$model ){
+            return self::formatErrorDckc( 8004,'this order is not exist!' );
+        }
+        //修改订单状态
+        $model->shipping_status = self::SS_RECEIVED;
+        $model->order_status = self::OS_CONFIRMED;
+        if (!$model->save())
+        {
+            return self::formatErrorDckc( 8005,'update order fail!' );
+        }
+        OrderAction::toCreateOrUpdate($model->order_id, $model->order_status, self::SS_RECEIVED, $model->pay_status);
+        Erp::order($model->order_sn);
+        return self::formatBodyDckc(['id' => $id ]);
+
+    }
+    public static function getDetailSeller(array $attributes)
+    {
+        extract($attributes);
+        $uid = Token::authorizationSeller();
+
+        $model = self::where('order_sn',$id);
+        $model->whereIn('pay_status', [self::PS_PAYED]);
+        $model->whereIn('order_status', [self::OS_UNCONFIRMED]);
+        $model->whereIn('shipping_status', [self::SS_UNSHIPPED]);
+        if( !$model ){
+            return self::formatErrorDckc( 8004,'this order is not exist!' );
+        }
+        $data = $model
+            ->with('goods')
+            ->orderBy('add_time', 'DESC')->get()->toArray();
+
+        $result = array();
+        if (!empty($data)) {
+            $consignee_info = UserAddress::get_consignee_dckc( );
+            foreach ($data as $k => $v) {
+                $_tmp = array();
+                $counter = 0;
+                $_info = array();
+                if (!empty($v['goods']) && is_array($v['goods'])) {
+                    foreach ($v['goods'] as $kk => $vv) {
+                        $_tmp_info['id'] = $vv['product']['id'];
+                        $_tmp_info['name'] = $vv['product']['name'];
+                        $_tmp_info['price'] = $vv['product']['price'];
+                        $_tmp_info['count'] = $vv['total_amount'];
+                        $_tmp_info['amount'] = $vv['total_price'];
+                        $_info[] = $_tmp_info;
+                        $counter += $vv['total_amount'];
+                    }
+                }
+                $best = explode("|", $v['besttime']);
+                $_tmp['bookDate'] = (count($best) > 1) ? $best['0'] : '';
+                $_tmp['bookTime'] = (count($best) > 1) ? $best['1'] : '';
+                $_tmp['createTime'] = date('Y-m-d H:i:s',$v['created_at'] );
+                $_tmp['id'] = $v['sn'];
+                $_tmp['message'] = $v['paynote'];
+                $_tmp['paymentMethod'] = $v['payid'];
+                $_tmp['paymentState'] = $v['status'];
+                $_tmp['totalAmount'] = $v['total'];
+                $_tmp['totalCount'] = $counter;
+                $_tmp['goodsList'] = $_info;
+                $_user = array();
+                $_user['id'] = $uid;
+                $_user['name'] = $consignee_info->consignee;
+                $_user['phone'] = $consignee_info->mobile;
+                $_user['address'] = $consignee_info->address;
+                $_user['otherPoiInfo'] = $consignee_info->sign_building;
+                $_user['poiName'] = $consignee_info->address_name;
+                $_tmp['user'] = $_user;
+                $result = $_tmp;
+            }
+        }
+        return self::formatBodyDckc(['data' => $result]);
+
+    }
     public static function getDetailDckc(array $attributes)
     {
         extract($attributes);
