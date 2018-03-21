@@ -214,6 +214,21 @@ class UserController extends Controller
         return $this->jsondckc( BaseModel::formatBodyDckc(['data'=>$consignee_info]) );
     }
 
+    public function sellerAuth(){
+        $rules = [
+            'js_code' => 'required|string|min:1'
+        ];
+
+        if ($error = $this->validateInput($rules)) {
+            return $error;
+        }
+
+        //$data = Member::auth($this->validated);
+        $data = [];
+        return $this->json($data);
+
+    }
+
     /**
      * POST /user/update-password
      */

@@ -39,6 +39,7 @@ $app->group(['namespace' => 'App\Http\Controllers\dckc','prefix' => 'dckc', 'mid
     $app->get('wxconfig/test','WxConfigController@test');
     $app->get('delivery/checkRange','DeliveryController@checkRange');
     $app->get('user/login','UserController@authDckc');
+    $app->get('seller/login','UserController@sellerAuth');
 
 });
 
