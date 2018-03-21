@@ -223,7 +223,7 @@ class UserController extends Controller
             return $error;
         }
         $data = Member::sellerAuthLogin($this->validated);
-        return $this->json($data);
+        return $this->jsondckc($data);
     }
 
     /**
