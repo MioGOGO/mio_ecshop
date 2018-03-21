@@ -484,6 +484,45 @@ class Member extends BaseModel {
 
         return $reUrl;
     }
+    public static function sellerAuthLogin( array $attributes ){
+        extract($attributes);
+        $userinfo = null;
+        $wxainfo = self::getUserByWXA($js_code);
+        if($wxainfo)
+        {
+            $open_id = $wxainfo['openid'];
+            $session_key = $wxainfo['session_key'];
+            $userinfo['prefix'] = 'wxa';
+            $userinfo['avatar'] = '';
+            $userinfo['gender'] = 0;
+            $userinfo['nickname'] = 'wxa_'+$wxainfo['openid'];
+            $is_new_user = false;
+            if (!$user_id = self::checkBind($open_id,self::VENDOR_WXA)) {
+                // create user
+                $model = self::createAuthUser(self::VENDOR_WXA, $open_id, $userinfo['nickname'], $userinfo['gender'], $userinfo['prefix'], $userinfo['avatar']);
+
+                if (!$model) {
+                    return self::formatError(self::BAD_REQUEST, trans('message.member.auth.error'));
+                }
+
+                $user_id = $model->user_id;
+                $is_new_user = true;
+
+
+            } else {
+                UserRegStatus::toUpdate($user_id, 1);
+                $user_id = Member::where('user_name', $userinfo['nickname'])->where('user_rank',2)->first();
+            }
+
+            if( $is_new_user  && !$user_id ){
+                return self::formatErrorDckc( '8001','seller Permission denied' );
+            }else{
+                return self::formatBodyDckc(['token' => Token::encode(['uid' => $user_id]),'user_id'=>$user_id]);
+            }
+        }else{
+            return self::formatErrorDckc( '8002','wxa error' );
+        }
+    }
     public static function authDckc( array $attributes ){
         $uid = Token::authorizationDckc();
         if(!$uid){
@@ -867,9 +906,9 @@ class Member extends BaseModel {
 
     }
 
-    private static function checkBind($open_id)
+    private static function checkBind($open_id,$vendor=1)
     {
-        $user = Sns::where('open_id', $open_id)->first();
+        $user = Sns::where('open_id', $open_id)->where('vendor',$vendor)->first();
         if (empty($user)) {
             return false;
         }

@@ -222,11 +222,8 @@ class UserController extends Controller
         if ($error = $this->validateInput($rules)) {
             return $error;
         }
-
-        //$data = Member::auth($this->validated);
-        $data = [];
+        $data = Member::sellerAuthLogin($this->validated);
         return $this->json($data);
-
     }
 
     /**
