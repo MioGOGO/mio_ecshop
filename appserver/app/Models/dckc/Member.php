@@ -515,12 +515,12 @@ class Member extends BaseModel {
             }
 
             if( $is_new_user  && !$user_id ){
-                return self::formatErrorDckc( '8001','seller Permission denied' );
+                return self::formatErrorDckc( 8001,'seller Permission denied' );
             }else{
                 return self::formatBodyDckc(['token' => Token::encode(['uid' => $user_id]),'user_id'=>$user_id]);
             }
         }else{
-            return self::formatErrorDckc( '8002','wxa error' );
+            return self::formatErrorDckc( 8002,'wxa error' );
         }
     }
     public static function authDckc( array $attributes ){
