@@ -31,6 +31,8 @@ if ($_REQUEST['act']== 'list')
     $auth_sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('shop_config') . ' WHERE code = "authorize"';
     $auth = $GLOBALS['db']->getRow($auth_sql);
     $params = unserialize($auth['value']);
+    //mio 跳过
+    $params['authorize_code'] = 'NDE';
     if($params['authorize_code'] != 'NDE'){
         $url = $params['authorize_code']=='NCH'?'http://account.shopex.cn/order/confirm/goods_2460-946 ':'https://account.shopex.cn/order/confirm/goods_2540-1050 ';
         $smarty->assign('url', $url);
