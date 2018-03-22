@@ -55,6 +55,4 @@ return [
     */
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
     'log_max_files' => 30,
-    SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-    'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 ];
