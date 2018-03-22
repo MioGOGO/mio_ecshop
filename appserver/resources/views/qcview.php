@@ -1,0 +1,1 @@
+<img src="{!! QrCode::generate('Hello,LaravelAcademy!'); !!}">
