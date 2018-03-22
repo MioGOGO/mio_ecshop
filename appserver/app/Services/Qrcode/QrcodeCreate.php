@@ -15,7 +15,8 @@ class QrcodeCreate
     public static function createQr( $msg ){
         $errorCorrectionLevel = 'L';
         $matrixPointSize = 5;
-        return QRcode::png($msg,false, $errorCorrectionLevel, $matrixPointSize, 2);
+        $img = QRcode::png($msg,false, $errorCorrectionLevel, $matrixPointSize, 2);
+        return "<img src='$img'>";
     }
 
 }
