@@ -123,7 +123,9 @@ class Token
     public static function authorizationSeller(){
 
         $token = app('request')->header('auth_token');
+        $aa = app('request');
         Log::debug('AuthorizationSeller', ['token' => $token]);
+        Log::debug('AuthorizationSeller_debug', ['aa' => $aa]);
         if ($payload = self::decode($token)) {
             Log::debug('payload', ['payload' => $payload]);
             if (is_object($payload) && property_exists($payload, 'uid')) {
