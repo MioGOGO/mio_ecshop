@@ -196,7 +196,7 @@ class Order extends BaseModel {
     public static function getDetailSeller(array $attributes)
     {
         extract($attributes);
-        //$uid = Token::authorizationSeller();
+        Token::authorizationSeller();
 
         $model = self::where('order_sn',$id);
         $model->whereIn('pay_status', [self::PS_PAYED]);
@@ -209,9 +209,10 @@ class Order extends BaseModel {
             ->with('goods')
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
+        $uid = $model->first()->user_id;
         $result = array();
         if (!empty($data)) {
-            $consignee_info = UserAddress::get_consignee_seller( $model->user_id );
+            $consignee_info = UserAddress::get_consignee_seller( $uid );
             foreach ($data as $k => $v) {
                 $_tmp = array();
                 $counter = 0;
