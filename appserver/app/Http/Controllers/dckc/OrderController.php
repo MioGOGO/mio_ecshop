@@ -16,7 +16,6 @@ use App\Models\dckc\OrderGoods;
 use Validator;
 use App\Models\BaseModel;
 use App\Models\dckc\Payment;
-use App\Services\Qrcode;
 
 
 
@@ -119,8 +118,8 @@ class OrderController extends Controller
     }
     //生成订单二维码
     public function createQr(){
-
-        echo Qrcode\QrcodeCreate::createQr( 'mio' );
+        $a = QrCode::generate('Hello,LaravelAcademy!');
+        echo "<img src='$a'>";
 
 
     }

@@ -7,8 +7,8 @@
  */
 
 namespace App\Services\Qrcode;
-require_once("phpqrcode.php");
 
+require_once("phpqrcode.php");
 class QrcodeCreate
 {
 

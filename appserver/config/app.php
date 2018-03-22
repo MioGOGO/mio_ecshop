@@ -2,9 +2,9 @@
 //
 
 return [
-    
+
     'debug' => env('APP_DEBUG', true),
-    
+
     'name' => env('APP_NAME', 'DCKC'),
 
     'shop_url' => env('SHOP_URL', ''),
@@ -55,4 +55,6 @@ return [
     */
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
     'log_max_files' => 30,
+    SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+    'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 ];
