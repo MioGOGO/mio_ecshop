@@ -117,8 +117,18 @@ class OrderController extends Controller
     }
     //生成订单二维码
     public function createQr(){
+        $rules = [
+            'id'        => 'required|string|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $info = $this->validated['id'];
+        if(!file_exists(base_path('public/qrcodes/'.$info.'png'))){
+            QrCode::format('png')->size(200)->merge(base_path('public/img/logo.gif'),.15)->generate('hello mio',base_path('public/qrcodes/'.$info.'png'));
+        }
+        $img = base_path('public/qrcodes/'.$this->validated['id'].'png');
         //$a = QrCode::generate('Hello,LaravelAcademy!');
-        $img = QrCode::format('png')->size(200)->merge(base_path('public/img/logo.gif'),.15)->generate('hello mio',base_path('public/qrcodes/qrcode.png'));
         //echo "<img src='$a>";
 
         return view('qcview',  ['img'=>$img]  );
