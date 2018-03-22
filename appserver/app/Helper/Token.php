@@ -122,7 +122,7 @@ class Token
 
     public static function authorizationSeller(){
 
-        $token = app('request')->header('auth_token');
+        $token = app('request')->header('auth-token');
         $aa = app('request');
         Log::debug('AuthorizationSeller', ['token' => $token]);
         Log::debug('AuthorizationSeller_debug', ['aa' => $aa]);
