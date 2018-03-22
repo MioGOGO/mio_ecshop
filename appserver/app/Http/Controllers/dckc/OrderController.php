@@ -125,7 +125,7 @@ class OrderController extends Controller
         }
         $info = $this->validated['id'];
         if(!file_exists(base_path('public/qrcodes/'.$info.'png'))){
-            QrCode::format('png')->size(200)->merge(base_path('public/img/logo.gif'),.15)->generate('hello mio',base_path('public/qrcodes/'.$info.'png'));
+            QrCode::format('png')->size(200)->merge('/public/img/logo.gif',.15)->generate($info,base_path('public/qrcodes/'.$info.'png'));
         }
         $img = base_path('public/qrcodes/'.$this->validated['id'].'png');
         //$a = QrCode::generate('Hello,LaravelAcademy!');
