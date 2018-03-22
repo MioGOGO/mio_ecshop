@@ -118,7 +118,7 @@ class OrderController extends Controller
     //生成订单二维码
     public function createQr(){
         //$a = QrCode::generate('Hello,LaravelAcademy!');
-        $img = QrCode::format('png')->size(200)->merge('/public/img/logo.gif',.15)->generate('hello mio','/public/qrcodes/qrcode.png');
+        $img = QrCode::format('png')->size(200)->merge(base_path('public/img/logo.gif'),.15)->generate('hello mio',base_path('public/qrcodes/qrcode.png'));
         //echo "<img src='$a>";
 
         return view('qcview',  ['img'=>$img]  );
