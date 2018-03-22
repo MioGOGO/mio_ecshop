@@ -117,10 +117,10 @@ class OrderController extends Controller
     }
     //生成订单二维码
     public function createQr(){
-        //$a = QrCode::generate('Hello,LaravelAcademy!');
+        $a = QrCode::generate('Hello,LaravelAcademy!');
         //echo "<img src='$a>";
 
-        return view('qcview',  []  );
+        return view('qcview',  ['a'=>$a]  );
 
     }
     /**
