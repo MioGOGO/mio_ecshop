@@ -196,7 +196,7 @@ class Order extends BaseModel {
     public static function getDetailSeller(array $attributes)
     {
         extract($attributes);
-        $uid = Token::authorizationSeller();
+        //$uid = Token::authorizationSeller();
 
         $model = self::where('order_sn',$id);
         $model->whereIn('pay_status', [self::PS_PAYED]);

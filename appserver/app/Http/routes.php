@@ -59,7 +59,8 @@ $app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'mi
 });
 
 //wxa seller auth
-$app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss','wxatoken']],function ($app)
+//wxatoken
+$app->group(['prefix' => 'dckc', 'namespace' => 'App\Http\Controllers\dckc', 'middleware' => ['xss']],function ($app)
 {
     $app->get('seller/delivery','OrderController@sellerDelivery');
     $app->get('seller/getorderinfo','OrderController@sellerGetOrderInfo');
