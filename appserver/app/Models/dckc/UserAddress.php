@@ -52,6 +52,31 @@ class UserAddress extends BaseModel
 
         return $arr;
     }
+    public static function get_consignee_seller( $uid,$isFormat = false )
+    {
+        $user_id = $uid;
+        $arr = array();
+        if ($user_id) {
+            if( $isFormat ){
+                return self::formatGetConsigneeDckc( $user_id );
+            }
+            return self::where('user_id',$user_id)->first();
+        }
+        if ($user_id > 0)
+        {
+            /* 取默认地址 */
+            // $sql = "SELECT ua.*".
+            //         " FROM " . $GLOBALS['ecs']->table('user_address') . "AS ua, ".$GLOBALS['ecs']->table('users').' AS u '.
+            //         " WHERE u.user_id='$uid' AND ua.address_id = u.address_id";
+
+            // $arr = $GLOBALS['db']->getRow($sql);
+            $arr = self::join('users','user_address.address_id', '=', 'users.address_id')
+                ->where('users.user_id',$user_id)
+                ->first()->toArray();
+        }
+
+        return $arr;
+    }
     public static function formatGetConsigneeDckc( $user_id ){
         $resArray = [];
         $objData = self::where('user_id',$user_id)->first();
