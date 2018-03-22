@@ -124,11 +124,11 @@ class OrderController extends Controller
             return $error;
         }
         $info = $this->validated['id'];
-        $info = serialize( $info );
-        if(!file_exists(base_path('public/qrcodes/'.$info.'.png'))){
-            QrCode::format('png')->size(200)->merge('/public/img/logo.gif',.15)->generate($info,base_path('public/qrcodes/'.$info.'.png'));
+        $info = urlencode( $info );
+        if(!file_exists(base_path('public/img/qrcodes/'.$info.'.png'))){
+            QrCode::format('png')->size(200)->merge('/public/img/logo.gif',.15)->generate($info,base_path('public/img/qrcodes/'.$info.'.png'));
         }
-        $img = base_path('public/qrcodes/'.$this->validated['id'].'png');
+        $img = 'img/qrcodes/'.$info.'png';
         //$a = QrCode::generate('Hello,LaravelAcademy!');
         //echo "<img src='$a>";
 
