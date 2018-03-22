@@ -1,3 +1,3 @@
 <div class="visible-print text-center">
-    <?php  echo $img ;?>
+    <?php echo $img ;?>
 </div>
