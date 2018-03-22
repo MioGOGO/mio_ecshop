@@ -211,7 +211,7 @@ class Order extends BaseModel {
 
         $result = array();
         if (!empty($data)) {
-            $consignee_info = UserAddress::get_consignee_seller( $data->user_id );
+            $consignee_info = UserAddress::get_consignee_seller( $model->user_id );
             foreach ($data as $k => $v) {
                 $_tmp = array();
                 $counter = 0;
