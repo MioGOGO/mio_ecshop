@@ -16,6 +16,7 @@ use App\Models\dckc\OrderGoods;
 use Validator;
 use App\Models\BaseModel;
 use App\Models\dckc\Payment;
+use App\Services\Qrcode;
 
 
 
@@ -114,6 +115,13 @@ class OrderController extends Controller
         }
         $orderInfo = Order::getDetailSeller( $this->validated );
         return $this->jsondckc( $orderInfo );
+
+    }
+    //生成订单二维码
+    public function createQr(){
+
+        echo Qrcode\QrcodeCreate::createQr( 'mio' );
+
 
     }
     /**
