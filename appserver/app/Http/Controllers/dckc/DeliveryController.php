@@ -33,4 +33,11 @@ class DeliveryController extends Controller
 
     }
 
+    public function getRangeList(){
+
+        $result = ShopConfig::getRangeList();
+        return $this->jsondckc( $result );
+
+    }
+
 }

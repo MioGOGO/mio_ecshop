@@ -65,4 +65,15 @@ class ShopConfig extends BaseModel {
         }
         return self::formatBodyDckc( $res );
     }
+
+    public static function getRangeList(){
+//        if( json_decode( $params,true ) ){
+//            $paramsArray = json_decode( $params,true );
+//        }else{
+//            return self::formatErrorDckc(40001,'json format error');
+//        }
+        $sconf = self::findByCode( 'close_comment' );
+        $res = ['data'=>['RangeList'=>$sconf]];
+        return self::formatBodyDckc( $res );
+    }
 }
