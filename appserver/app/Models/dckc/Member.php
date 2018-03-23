@@ -497,6 +497,7 @@ class Member extends BaseModel {
             $userinfo['gender'] = 0;
             $userinfo['nickname'] = 'wxa_'+$wxainfo['openid'];
             $is_new_user = false;
+            $permission = false;
             if (!$user_id = self::checkBind($open_id,self::VENDOR_WXA)) {
                 // create user
                 $model = self::createAuthUser(self::VENDOR_WXA, $open_id, $userinfo['nickname'], $userinfo['gender'], $userinfo['prefix'], $userinfo['avatar']);
@@ -506,19 +507,17 @@ class Member extends BaseModel {
                 }
 
                 $user_id = $model->user_id;
-                Log::debug('user_id_debug_flag1', ['user_id_debug_flag1' => $user_id]);
                 $is_new_user = true;
 
 
             } else {
                 UserRegStatus::toUpdate($user_id, 1);
 
-                Log::debug('user_id_debug_flag2', ['user_id_debug_flag2' => $user_id]);
-                $user_id = Member::where('user_id', $user_id)->where('user_rank',2)->first();
-                Log::debug('user_id_debug_flag3', ['user_id_debug_flag3' => $user_id]);
+                $permission = Member::where('user_id', $user_id)->where('user_rank',2)->first();
+
             }
 
-            if( $is_new_user  && !$user_id ){
+            if( $is_new_user  && !$permission ){
                 return self::formatErrorDckc( 8001,'seller Permission denied' );
             }else{
                 return self::formatBodyDckc(['token' => Token::encode(['uid' => $user_id]),'user_id'=>$user_id]);
