@@ -210,7 +210,7 @@ class Order extends BaseModel {
             ->with('goods')
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
-        if( $uid = $model->first()->user_id ){
+        if( !$uid = $model->first()->user_id ){
             return self::formatErrorDckc( 8004,'this order is not exist!' );
         }
         $result = array();
