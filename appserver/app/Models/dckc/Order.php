@@ -673,8 +673,8 @@ class Order extends BaseModel {
         return $this->attributes['order_sn'];
     }
 
-    public function getshippingStatusAttribute(){
-        return $this->shipping_status;
+    public function getShippingStatusAttribute(){
+        return $this->attributes['shipping_status'];
     }
 
     public function getTotalAttribute()
