@@ -133,7 +133,7 @@ class OrderController extends Controller
         $img = url('/img/qrcodes/'.$info.'.png');
         //$a = QrCode::generate('Hello,LaravelAcademy!');
         //echo "<img src='$a>";
-        $data = BaseModel::formatBodyDckc( ['img'=>$img] );
+        $data = BaseModel::formatBodyDckc( ['data'=>['img'=>$img]] );
         return $this->jsondckc( $data );
         //return view('qcview',  ['img'=>$img]  );
 
