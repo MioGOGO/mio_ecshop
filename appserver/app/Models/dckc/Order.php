@@ -203,7 +203,7 @@ class Order extends BaseModel {
             return self::formatErrorDckc( 8003,'this order seller Permission denied' );
         }
         $model = self::where('order_sn',$id);
-        $model->whereIn('pay_status', [self::PS_PAYED,self::STATUS_CREATED]);
+        $model->whereIn('pay_status', [self::PS_PAYED]);
         if( !$model ){
             return self::formatErrorDckc( 8004,'this order is not exist!' );
         }
