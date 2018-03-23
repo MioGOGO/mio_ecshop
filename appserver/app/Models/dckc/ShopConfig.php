@@ -74,7 +74,11 @@ class ShopConfig extends BaseModel {
 //        }
         $sconf = self::findByCode( 'close_comment' );
         $sconfArray = json_decode( $sconf,true );
-        $res = ['data'=>['RangeList'=>$sconfArray]];
+        $arr = array();
+        foreach ( $sconfArray as $val ){
+            $arr[] = $val['name'];
+        }
+        $res = ['data'=>['RangeList'=>$arr]];
         return self::formatBodyDckc( $res );
     }
 }
