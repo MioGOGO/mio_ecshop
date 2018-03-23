@@ -191,7 +191,7 @@ class Order extends BaseModel {
         }
         OrderAction::toCreateOrUpdate($model->order_id, $model->order_status, self::SS_RECEIVED, $model->pay_status);
         Erp::order($model->order_sn);
-        return self::formatBodyDckc(['id' => $id ]);
+        return self::getDetailSeller(['id' => $id ]);
 
     }
     public static function getDetailSeller(array $attributes)
@@ -212,9 +212,10 @@ class Order extends BaseModel {
             ->with('goods')
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
-        if( !$uid = $model->first()->user_id ){
-            return self::formatErrorDckc( 8004,'this order is not exist!' );
+        if( !$datamodel = $model->first() ){
+            return self::formatErrorDckc( 8004,'this order is not exist order is  complate' );
         }
+        $uid = $datamodel->user_id;
         $result = array();
         if (!empty($data)) {
             $consignee_info = UserAddress::get_consignee_seller( $uid );
