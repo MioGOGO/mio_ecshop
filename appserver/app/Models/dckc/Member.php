@@ -517,7 +517,7 @@ class Member extends BaseModel {
 
             }
 
-            if( $is_new_user  && !$permission ){
+            if( $is_new_user  || !$permission ){
                 return self::formatErrorDckc( 8001,'seller Permission denied' );
             }else{
                 return self::formatBodyDckc(['token' => Token::encode(['uid' => $user_id]),'user_id'=>$user_id]);
