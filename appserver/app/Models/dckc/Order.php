@@ -170,10 +170,10 @@ class Order extends BaseModel {
     }
     public static function sellerDelivery( array  $attributes ){
         extract( $attributes );
-        $uid = Token::authorizationSeller();
-        if( !$uid ){
-            return self::formatErrorDckc( 8003,'this order seller Permission denied' );
-        }
+//        $uid = Token::authorizationSeller();
+//        if( !$uid ){
+//            return self::formatErrorDckc( 8003,'this order seller Permission denied' );
+//        }
         $model = self::where('order_sn',$id);
         $model->whereIn('pay_status', [self::PS_PAYED]);
         $model->whereIn('order_status', [self::OS_UNCONFIRMED]);
