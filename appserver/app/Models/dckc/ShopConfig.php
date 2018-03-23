@@ -73,7 +73,8 @@ class ShopConfig extends BaseModel {
 //            return self::formatErrorDckc(40001,'json format error');
 //        }
         $sconf = self::findByCode( 'close_comment' );
-        $res = ['data'=>['RangeList'=>$sconf]];
+        $sconfArray = json_decode( $sconf,true );
+        $res = ['data'=>['RangeList'=>$sconfArray]];
         return self::formatBodyDckc( $res );
     }
 }
