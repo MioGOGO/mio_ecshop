@@ -506,12 +506,16 @@ class Member extends BaseModel {
                 }
 
                 $user_id = $model->user_id;
+                Log::debug('user_id_debug_flag1', ['user_id_debug_flag1' => $user_id]);
                 $is_new_user = true;
 
 
             } else {
                 UserRegStatus::toUpdate($user_id, 1);
+
+                Log::debug('user_id_debug_flag2', ['user_id_debug_flag2' => $user_id]);
                 $user_id = Member::where('user_name', $userinfo['nickname'])->where('user_rank',2)->first();
+                Log::debug('user_id_debug_flag3', ['user_id_debug_flag3' => $user_id]);
             }
 
             if( $is_new_user  && !$user_id ){
