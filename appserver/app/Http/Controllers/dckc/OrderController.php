@@ -130,11 +130,12 @@ class OrderController extends Controller
         if(!file_exists(base_path('public/img/qrcodes/'.$info.'.png'))){
             QrCode::format('png')->size($size)->merge('/public/img/logo.gif',.15)->margin(0)->generate($info,base_path('public/img/qrcodes/'.$info.'.png'));
         }
-        $img = '/img/qrcodes/'.$info.'.png';
+        $img = url('/img/qrcodes/'.$info.'.png');
         //$a = QrCode::generate('Hello,LaravelAcademy!');
         //echo "<img src='$a>";
-
-        return view('qcview',  ['img'=>$img]  );
+        $data = formatBodyDckc( ['img'=>$img] );
+        return $this->jsondckc( $data );
+        //return view('qcview',  ['img'=>$img]  );
 
     }
     /**
