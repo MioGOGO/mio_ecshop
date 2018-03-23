@@ -177,11 +177,13 @@ class Order extends BaseModel {
         $model = self::where('order_sn',$id);
         $model->whereIn('pay_status', [self::PS_PAYED]);
         $model->whereIn('order_status', [self::OS_UNCONFIRMED]);
-        $model->whereIn('shipping_status', [self::SS_UNSHIPPED])->first();
+        $model->whereIn('shipping_status', [self::SS_UNSHIPPED]);
         if( !$model ){
             return self::formatErrorDckc( 8004,'this order is not exist!' );
         }
         //修改订单状态
+        $model = $model->first();
+        var_dump(  $model);exit;
         $model->shipping_status = self::SS_RECEIVED;
         $model->order_status = self::OS_CONFIRMED;
         if (!$model->save())
