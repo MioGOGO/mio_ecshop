@@ -240,7 +240,7 @@ class Order extends BaseModel {
                 $_tmp['id'] = $v['sn'];
                 $_tmp['message'] = $v['paynote'];
                 $_tmp['paymentMethod'] = $v['payid'];
-                $_tmp['paymentState'] = ($v['status'] >0 ) ? 1 : 0;
+                $_tmp['paymentState'] = $v['status'];
                 $_tmp['shippingState'] = ($v['shippingStatus'] == 2) ? 1 : $v['shippingStatus'];
                 $_tmp['totalAmount'] = $v['total'];
                 $_tmp['totalCount'] = $counter;
