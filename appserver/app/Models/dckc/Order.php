@@ -180,7 +180,7 @@ class Order extends BaseModel {
         $model->whereIn('shipping_status', [self::SS_UNSHIPPED]);
         $model = $model->first();
         if( !$model ){
-            return self::formatErrorDckc( 8004,'this order is not exist!' );
+            return self::formatErrorDckc( 8004,'this order is not exist or order is  complate ' );
         }
         //修改订单状态
         $model->shipping_status = self::SS_RECEIVED;
@@ -202,9 +202,7 @@ class Order extends BaseModel {
             return self::formatErrorDckc( 8003,'this order seller Permission denied' );
         }
         $model = self::where('order_sn',$id);
-        $model->whereIn('pay_status', [self::PS_PAYED]);
-        $model->whereIn('order_status', [self::OS_UNCONFIRMED]);
-        $model->whereIn('shipping_status', [self::SS_UNSHIPPED]);
+        $model->whereIn('pay_status', [self::PS_PAYED,self::STATUS_CREATED]);
         if( !$model ){
             return self::formatErrorDckc( 8004,'this order is not exist!' );
         }
@@ -213,7 +211,7 @@ class Order extends BaseModel {
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
         if( !$datamodel = $model->first() ){
-            return self::formatErrorDckc( 8004,'this order is not exist order is  complate' );
+            return self::formatErrorDckc( 8004,'this order is not exist  or order is  complate' );
         }
         $uid = $datamodel->user_id;
         $result = array();
