@@ -15,8 +15,8 @@ class Order extends BaseModel {
     public    $timestamps = false;
 
     protected $guarded = [];
-    protected $appends = ['id', 'sn', 'total', 'payment', 'shipping', 'invoice', 'coupon', 'score','use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','promos','besttime','paynote','payid'];
-    protected $visible = ['id', 'sn', 'total', 'goods', 'payment', 'shipping', 'invoice', 'coupon', 'score', 'use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','discount_price','promos','besttime','paynote','payid'];
+    protected $appends = ['id', 'sn', 'total', 'payment', 'shipping', 'invoice', 'coupon', 'score','use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','promos','besttime','paynote','payid','shippingStatus'];
+    protected $visible = ['id', 'sn', 'total', 'goods', 'payment', 'shipping', 'invoice', 'coupon', 'score', 'use_score', 'cashgift', 'consignee', 'status', 'created_at', 'updated_at', 'canceled_at', 'paied_at', 'shipping_at', 'finish_at','discount_price','promos','besttime','paynote','payid','shippingStatus'];
 
     // ECM 订单状态
     const STATUS_CREATED     = 0; // 待付款
@@ -170,20 +170,19 @@ class Order extends BaseModel {
     }
     public static function sellerDelivery( array  $attributes ){
         extract( $attributes );
-//        $uid = Token::authorizationSeller();
-//        if( !$uid ){
-//            return self::formatErrorDckc( 8003,'this order seller Permission denied' );
-//        }
+        $uid = Token::authorizationSeller();
+        if( !$uid ){
+            return self::formatErrorDckc( 8003,'this order seller Permission denied' );
+        }
         $model = self::where('order_sn',$id);
         $model->whereIn('pay_status', [self::PS_PAYED]);
         $model->whereIn('order_status', [self::OS_UNCONFIRMED]);
         $model->whereIn('shipping_status', [self::SS_UNSHIPPED]);
+        $model = $model->first();
         if( !$model ){
             return self::formatErrorDckc( 8004,'this order is not exist!' );
         }
         //修改订单状态
-        $model = $model->first();
-        var_dump(  $model);exit;
         $model->shipping_status = self::SS_RECEIVED;
         $model->order_status = self::OS_CONFIRMED;
         if (!$model->save())
@@ -211,8 +210,11 @@ class Order extends BaseModel {
             ->with('goods')
             ->orderBy('add_time', 'DESC')->get()->toArray();
 
-        $uid = $model->first()->user_id;
+        if( $uid = $model->first()->user_id ){
+            return self::formatErrorDckc( 8004,'this order is not exist!' );
+        }
         $result = array();
+        var_dump( $data );exit;
         if (!empty($data)) {
             $consignee_info = UserAddress::get_consignee_seller( $uid );
             foreach ($data as $k => $v) {
@@ -238,6 +240,7 @@ class Order extends BaseModel {
                 $_tmp['message'] = $v['paynote'];
                 $_tmp['paymentMethod'] = $v['payid'];
                 $_tmp['paymentState'] = $v['status'];
+                $_tmp['shippingState'] = $v['status'];
                 $_tmp['totalAmount'] = $v['total'];
                 $_tmp['totalCount'] = $counter;
                 $_tmp['goodsList'] = $_info;
@@ -668,6 +671,10 @@ class Order extends BaseModel {
     public function getSnAttribute()
     {
         return $this->attributes['order_sn'];
+    }
+
+    public function getshippingStatusAttribute(){
+        return $this->shipping_status;
     }
 
     public function getTotalAttribute()
