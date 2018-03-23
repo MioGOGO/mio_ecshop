@@ -514,7 +514,7 @@ class Member extends BaseModel {
                 UserRegStatus::toUpdate($user_id, 1);
 
                 Log::debug('user_id_debug_flag2', ['user_id_debug_flag2' => $user_id]);
-                $user_id = Member::where('user_name', $userinfo['nickname'])->where('user_rank',2)->first();
+                $user_id = Member::where('user_id', $user_id)->where('user_rank',2)->first();
                 Log::debug('user_id_debug_flag3', ['user_id_debug_flag3' => $user_id]);
             }
 
