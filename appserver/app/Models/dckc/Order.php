@@ -214,7 +214,6 @@ class Order extends BaseModel {
             return self::formatErrorDckc( 8004,'this order is not exist!' );
         }
         $result = array();
-        var_dump( $data );exit;
         if (!empty($data)) {
             $consignee_info = UserAddress::get_consignee_seller( $uid );
             foreach ($data as $k => $v) {
@@ -240,7 +239,7 @@ class Order extends BaseModel {
                 $_tmp['message'] = $v['paynote'];
                 $_tmp['paymentMethod'] = $v['payid'];
                 $_tmp['paymentState'] = $v['status'];
-                $_tmp['shippingState'] = $v['status'];
+                $_tmp['shippingState'] = $v['shippingStatus'];
                 $_tmp['totalAmount'] = $v['total'];
                 $_tmp['totalCount'] = $counter;
                 $_tmp['goodsList'] = $_info;
