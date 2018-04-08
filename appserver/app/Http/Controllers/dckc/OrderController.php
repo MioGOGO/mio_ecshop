@@ -66,8 +66,8 @@ class OrderController extends Controller
     }
     public function orderlist(){
         $rules = [
-            'curPage'        => 'integer|min:1',
-            'count'        => 'integer|min:1',
+            'curPage'        => 'integer|min:0',
+            'count'        => 'integer|min:10',
         ];
         if ($error = $this->validateInputDckc($rules)) {
             return $error;
