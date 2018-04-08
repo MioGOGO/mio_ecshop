@@ -65,7 +65,14 @@ class OrderController extends Controller
 
     }
     public function orderlist(){
-        $orderIinfo = Order::getListDckc( array() );
+        $rules = [
+            'curPage'        => 'integer|min:1',
+            'count'        => 'integer|min:1',
+        ];
+        if ($error = $this->validateInputDckc($rules)) {
+            return $error;
+        }
+        $orderIinfo = Order::getListDckc( $this->validated );
         return $this->jsondckc( $orderIinfo );
 
     }
