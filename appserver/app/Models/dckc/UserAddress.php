@@ -80,9 +80,11 @@ class UserAddress extends BaseModel
     public static function formatGetConsigneeDckc( $user_id ){
         $resArray = [];
         $objData = self::where('user_id',$user_id)->first();
+        $memberInfo = Member::where('user_id', $user_id)->first();
         if( $objData ){
             $resArray['id'] = $user_id;
             $resArray['name'] = $objData->consignee;
+            $resArray['sex'] = $memberInfo->sex;
             $resArray['phone'] = $objData->mobile;
             $resArray['address'] = $objData->address;
             $resArray['otherPoiInfo'] = $objData->sign_building;
