@@ -125,6 +125,14 @@ class Order extends BaseModel {
     public static function getListDckc(array $attributes)
     {
         extract($attributes);
+        $limitFrom = 0;
+        $limitCount = 10;
+        if( isset( $curPage ) && isset( $count ) ){
+            $limitFrom =  intval( $curPage*$count );
+            $limitCount = $count;
+
+        }
+
         $uid = Token::authorizationDckc();
 
         $model = self::where(['user_id' => $uid]);
@@ -135,7 +143,7 @@ class Order extends BaseModel {
 
         $data = $model
             ->with('goods')
-            ->orderBy('add_time', 'DESC')->get()->toArray();
+            ->orderBy('add_time', 'DESC')->offset($limitFrom)->limit($limitCount)->get()->toArray();
 
         $result = array();
         if( !empty( $data ) ){
